@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import postsReducer from './store/reducers/posts';
 import categoriesReducer from './store/reducers/categories';
 import ReduxThunk from 'redux-thunk';
+import { isPlatformAndroid } from './helpers/Platform';
 
 enableScreens();
 
@@ -29,7 +30,8 @@ const fetchFonts = () => {
 export default function App() {
 
   StatusBar.setBarStyle('light-content');
-  StatusBar.setBackgroundColor(CustomColors.accentColor);
+  if (isPlatformAndroid())
+    StatusBar.setBackgroundColor(CustomColors.accentColor);
 
   const [fontLoaded, setFontLoaded] = useState(false);
   const [sponsors, setSponsors] = useState();

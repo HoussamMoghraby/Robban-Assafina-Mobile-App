@@ -28,15 +28,17 @@ const SponsorsList = (props) => {
 					return (
 						<View key={image.title} style={styles[getImageStyle('imageContainer', image.tag)]}>
 							<TouchableComponent onPress={() => { Linking.openURL(image.link) }}>
-								{
-									image.tag == 'golden-1' ?
-										<View style={styles.goldenSponsor}>
-											<MyText style={styles.goldenSponsorText} bold={true}>Golden Sponsor</MyText>
-										</View>
-										: <View></View>
-								}
 								<View>
-									<Image source={{ uri: image.imageUrl }} style={styles[getImageStyle('image', image.tag)]}></Image>
+									{
+										image.tag == 'golden-1' ?
+											<View style={styles.goldenSponsor}>
+												<MyText style={styles.goldenSponsorText} bold={true}>Golden Sponsor</MyText>
+											</View>
+											: <View></View>
+									}
+									<View>
+										<Image source={{ uri: image.imageUrl }} style={styles[getImageStyle('image', image.tag)]}></Image>
+									</View>
 								</View>
 							</TouchableComponent>
 						</View>
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
 	imageContainerGolden1: {
 		//width: '100%',
 		width: '100%',
-		marginVertical: 5,		
+		marginVertical: 5,
 		alignItems: 'center'
 	},
 	imageGolden1: {
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
 	imageContainerGolden2: {
 		//width: '100%',
 		width: '100%',
-		marginVertical: 5,		
+		marginVertical: 5,
 		alignItems: 'center'
 	},
 	imageGolden2: {

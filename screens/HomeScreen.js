@@ -24,9 +24,7 @@ const HomeScreen = (props) => {
             <PostsList {...props} showBetweenPostsSponsors={true} scrollToTop={scrollToTop}></PostsList>
             <View style={styles.sponsorsContainer}>
                 <ImageBackground style={styles.sponsorsImage} source={{
-                    uri: 'https://assafinaonline.com/wp-content/uploads/MUSASINO-BANNER.gif',
-                    width: '100%',
-                    height: SPONSORS_IMAGE_HEIGHT
+                    uri: 'https://assafinaonline.com/wp-content/uploads/MUSASINO-BANNER.gif'
                 }}></ImageBackground>
             </View>
         </View >
