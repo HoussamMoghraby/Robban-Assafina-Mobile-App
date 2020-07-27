@@ -1,0 +1,37 @@
+<HTML
+                            renderers={{
+                                div: (e) => {
+                                    console.log(e);
+                                    if (e['data-pdf']) {
+                                        // const htmContent = `<h3>${e['data-pdf']}</h3><iframe src="${e['data-pdf']}" width="250" height="500"></iframe>`;
+                                        return (
+                                            // <View key={Math.random()}><HTML html={htmlContent} imagesMaxWidth={Dimensions.get('window').width}></HTML></View>
+                                            <PdfReader source={{ uri: e['data-pdf'] }}></PdfReader>
+                                        )
+                                    }
+                                    return (<View></View>)
+                                },
+                                iframe: (e) => {
+                                    return (
+                                        <TouchableComponent key={Math.random()} onPress={() => { Linking.openURL(e.src) }}>
+                                            {e.src.includes('youtube') ?
+                                                <View style={{ padding: 5, width: '100%', height: 150, backgroundColor: '#000', alignItems: 'center', justifyContent: 'flex-start', borderRadius: 5 }}>
+                                                    <View>
+                                                        <View>
+                                                            <Text numberOfLines={1} style={{ fontSize: 16, color: '#fff' }}>{e.title}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                                                        <FontAwesome5 name="youtube" size={40} color="#db4b3f" ></FontAwesome5>
+                                                    </View>
+                                                </View>
+                                                : <View></View>
+                                            }
+                                        </TouchableComponent>
+                                    )
+                                }
+                            }}
+                            debug={false}
+                            onLinkPress={(evt, href) => { Linking.openURL(href); }}
+                            html={post.content.rendered}
+                            imagesMaxWidth={Dimensions.get('window').width} />
