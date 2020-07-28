@@ -5,7 +5,7 @@ import { isPlatformIOS } from '../helpers/Platform';
 const MyText = (props) => {
     const fontStyle = props.bold ? styles.boldFont : styles.standardFont;
     return (
-        <Text numberOfLines={props.numberOfLines} style={{ ...props.style, ...fontStyle, ...((isPlatformIOS() && isArabic(props.children)) ? textRight : '') }}> {props.children}</Text >
+        <Text numberOfLines={props.numberOfLines} style={{ ...props.style, ...fontStyle, ...((isPlatformIOS() && isArabic(props.children)) ? styles.textRight : '') }}> {props.children}</Text >
     );
 }
 
