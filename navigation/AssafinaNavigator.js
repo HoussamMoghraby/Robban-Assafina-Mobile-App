@@ -45,6 +45,7 @@ const defaultStackNavigatorConfig = {
         headerTitleStyle: {
             fontFamily: 'open-sans'
         },
+        headerBackTitleVisible: false
     }
 }
 
@@ -55,6 +56,8 @@ const HomeNavigator = createStackNavigator(
             navigationOptions: {
                 headerStyle: { backgroundColor: '#fff' },
                 headerTitleAlign: 'center',
+                headerBackTitleVisible: false,
+                headerTitle: ''
                 // headerRight: () => {
                 //     return (
                 //         <View style={{ padding: 5, flex: 1 }}>

@@ -178,9 +178,9 @@ PostScreen.navigationOptions = (navigationData) => {
         headerRight: () => {
             return (
                 <HeaderButtons HeaderButtonComponent={customHeaderComponent}>
-                    <Item onPress={() => { toggleFav(); }} title="Favorite" color={isFav ? "gold" : "#fff"} iconName="star"></Item>
-                    <Item onPress={() => { fsHandler('down'); }} title="FontDecrease" color="#fff" iconName="format-font-size-decrease"></Item>
-                    <Item onPress={() => { fsHandler('up'); }} title="FontIncrease" color="#fff" iconName="format-font-size-increase"></Item>
+                    <Item onPress={() => { toggleFav(); }} title="Favorite" color={isFav ? "gold" : (isPlatformAndroid() ? '#fff' : '#ccc')} iconName="star"></Item>
+                    <Item onPress={() => { fsHandler('down'); }} title="FontDecrease" color={isPlatformAndroid() ? "#fff" : CustomColors.primaryColor} iconName="format-font-size-decrease"></Item>
+                    <Item onPress={() => { fsHandler('up'); }} title="FontIncrease" color={isPlatformAndroid() ? "#fff" : CustomColors.primaryColor} iconName="format-font-size-increase"></Item>
                 </HeaderButtons>
             );
         }

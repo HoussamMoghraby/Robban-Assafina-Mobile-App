@@ -46,7 +46,7 @@ HomeScreen.navigationOptions = (navigationData) => {
             return (
                 <TouchableComponent onPress={() => { scrollHandler(); }}>
                     <View style={{ padding: 5, flex: 1 }}>
-                        <Image style={{ width: 120, height: 45 }} source={require('../assets/logo.png')}></Image>
+                        <Image style={{ width: isPlatformAndroid() ? 120 : 100, height: isPlatformAndroid() ? 45 : 35 }} source={require('../assets/logo.png')}></Image>
                     </View>
                 </TouchableComponent>
             )

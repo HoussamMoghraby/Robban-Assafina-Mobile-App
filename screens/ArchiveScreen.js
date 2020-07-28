@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ImageBackground, Dimensions, Linking, Share } from 'react-native';
 import MyText from '../components/MyText';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -18,8 +18,8 @@ import { useSelector } from 'react-redux';
 var DomParser = require('react-native-html-parser').DOMParser;
 
 //var post;
-var pdfUrl;
-const downloadPDFHandler = (url) => {
+//var pdfUrl;
+const downloadPDFHandler = /*useCallback(*/(url) => {
     Linking.openURL(url);
     //const { status, permissions } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     //console.log(status);
@@ -31,7 +31,7 @@ const downloadPDFHandler = (url) => {
     //      });
 
     //FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'assafina_docs');
-}
+}//, [props]);
 const sharePostHandler = async (post) => {
     try {
         const result = await Share.share({
@@ -62,14 +62,22 @@ const ArchiveScreen = (props) => {
     //const availablePosts = useSelector(state => state.posts.posts);
     //post = availablePosts.find(p => p.id == props.navigation.getParam('id'));
     const post = props.navigation.getParam('post');
-    let doc = new DomParser().parseFromString(post.content.rendered, 'text/html');
-    try {
-        pdfUrl = doc.getElementsByAttribute('data-pdf')[0].getAttribute('data-pdf');
-    }
-    catch{
-        console.log('Article does not contain a pdf link');
-        return (<View><Text>No pdf in article</Text></View>);
-    }
+    const [pdfUrl, setPdfUrl] = useState();
+    useEffect(() => {
+        let doc = new DomParser().parseFromString(post.content.rendered, 'text/html');
+        try {
+            setPdfUrl(doc.getElementsByAttribute('data-pdf')[0].getAttribute('data-pdf'));
+        }
+        catch (error) {
+            console.error(error);
+            console.log('Article does not contain a pdf link');
+            return (<View><Text>No pdf in article</Text></View>);
+        }
+    }, [post]);
+
+    useEffect(() => {
+        props.navigation.setParams({ navPdfUrl: pdfUrl });
+    }, [pdfUrl])
 
     if (!post) {
         props.navigation.navigate('Home');
@@ -102,13 +110,14 @@ const ArchiveScreen = (props) => {
 
 ArchiveScreen.navigationOptions = (navigationData) => {
     let navPost = navigationData.navigation.getParam('post');
+    let navPdfUrl = navigationData.navigation.getParam('navPdfUrl');
     return {
         headerTitle: navigationData.navigation.getParam('title'),
         headerRight: () => {
             return (
                 <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-                    <Item onPress={() => { downloadPDFHandler(pdfUrl); }} title="Save" color="#fff" iconName={isPlatformAndroid() ? 'md-download' : 'ios-download'}></Item>
-                    <Item onPress={() => { sharePostHandler(navPost); }} title="Share" color="#fff" iconName={isPlatformAndroid() ? 'md-share' : 'ios-share'}></Item>
+                    <Item onPress={() => { downloadPDFHandler(navPdfUrl); }} title="Save" color={isPlatformAndroid() ? "#fff" : CustomColors.primaryColor} iconName={isPlatformAndroid() ? 'md-download' : 'ios-download'}></Item>
+                    <Item onPress={() => { sharePostHandler(navPost); }} title="Share" color={isPlatformAndroid() ? "#fff" : CustomColors.primaryColor} iconName={isPlatformAndroid() ? 'md-share' : 'ios-share'}></Item>
                 </HeaderButtons>
             );
         }

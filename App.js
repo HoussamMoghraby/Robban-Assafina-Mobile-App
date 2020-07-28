@@ -29,7 +29,7 @@ const fetchFonts = () => {
 
 export default function App() {
 
-  StatusBar.setBarStyle('light-content');
+  StatusBar.setBarStyle(isPlatformAndroid() ? 'light-content' : 'default');
   if (isPlatformAndroid())
     StatusBar.setBackgroundColor(CustomColors.accentColor);
 

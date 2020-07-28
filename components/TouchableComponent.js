@@ -3,8 +3,8 @@ import { TouchableNativeFeedback, TouchableOpacity, TouchableHighlight } from 'r
 
 const TouchableComponent =
     //isPlatformIOS()
-    isPlatformAndroid()
+    (isPlatformAndroid()
         &&
-        getPlatformVersion() > 21 ? TouchableNativeFeedback : TouchableHighlight;
+        getPlatformVersion() > 21) ? TouchableNativeFeedback : TouchableOpacity;
 
 export default TouchableComponent;
