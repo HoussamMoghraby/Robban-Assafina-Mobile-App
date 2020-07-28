@@ -9,6 +9,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import postsReducer from './store/reducers/posts';
 import categoriesReducer from './store/reducers/categories';
+import authReducer from './store/reducers/auth';
 import ReduxThunk from 'redux-thunk';
 import { isPlatformAndroid } from './helpers/Platform';
 
@@ -16,7 +17,8 @@ enableScreens();
 
 const rootReducer = combineReducers({
   posts: postsReducer,
-  categories: categoriesReducer
+  categories: categoriesReducer,
+  auth: authReducer
 });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 

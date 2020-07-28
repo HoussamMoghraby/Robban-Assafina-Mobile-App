@@ -1,15 +1,56 @@
-import React from 'react';
-import { View, StyleSheet, TextInput, Keyboard } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { View, StyleSheet, TextInput, Keyboard, ActivityIndicator } from 'react-native';
 import CustomColors from '../constants/CustomColors';
 import MyText from '../components/MyText';
 import TouchableComponent from '../components/TouchableComponent';
+import { useSelector, useDispatch } from 'react-redux';
+import * as AuthActions from '../store/actions/auth';
 
 const LoginScreen = (props) => {
+    const [userNameInput, setUsernameInput] = useState('houssammoghraby@gmail.com');
+    const [passwordInput, setPasswordInput] = useState('myp@ss@WS123');
+    const [isLoading, setIsLoading] = useState();
+    const [errorText, setErrorText] = useState(null);
+    const dispatch = useDispatch();
+    const authenticateUser = useCallback(() => {
+        debugger;
+        const authenticate = async () => {
+            try {
+                setIsLoading(true);
+                await dispatch(AuthActions.authenticateUser(userNameInput, passwordInput));
+                setErrorText(null);
+                props.navigation.replace('Archives');
+            }
+            catch (error) {
+                console.info(error);
+                setErrorText('Invalid credentials! please try again');
+            }
+            finally {
+                setIsLoading(false);
+            }
+        }
+        if (!isLoading)
+            authenticate();
+    }, [dispatch, userNameInput, passwordInput, isLoading, errorText]);
+
+    const usernameInputHandler = (input) => {
+        setUsernameInput(input);
+    }
+
+    const passwordInputHandler = (input) => {
+        setPasswordInput(input);
+    }
+
     return (
         <View style={styles.screen}>
+            <View style={{ marginBottom: 10 }}>
+                <MyText style={{ color: 'red', fontSize: 16 }}>{errorText}</MyText>
+            </View>
             <View style={styles.container}>
                 <View style={styles.inputContainer}>
                     <TextInput
+                        onChangeText={usernameInputHandler}
+                        value={userNameInput}
                         onSubmitEditing={(e) => { }}
                         blurOnSubmit={true}
                         onBlur={() => { /*Keyboard.dismiss();*/ }}
@@ -22,10 +63,12 @@ const LoginScreen = (props) => {
                         autoCorrect={false}
                         numberOfLines={1}
                         placeholder="Email / Username"
-                        style={styles.input}></TextInput>
+                        style={{ ...styles.input, ...(errorText ? styles.invalidInput : '') }}></TextInput>
                 </View>
                 <View style={styles.inputContainer}>
                     <TextInput
+                        onChangeText={passwordInputHandler}
+                        value={passwordInput}
                         secureTextEntry={true}
                         textContentType="password"
                         onSubmitEditing={(e) => { }}
@@ -40,13 +83,20 @@ const LoginScreen = (props) => {
                         autoCorrect={false}
                         numberOfLines={1}
                         placeholder="Password"
-                        style={styles.input}></TextInput>
+                        style={{ ...styles.input, ...(errorText ? styles.invalidInput : '') }}></TextInput>
                 </View>
 
                 <View>
-                    <TouchableComponent style={styles.loginButton} onPress={() => { props.navigation.navigate('Archives') }}>
+                    <TouchableComponent style={styles.loginButton} onPress={() => { authenticateUser() }}>
                         <View>
-                            <MyText bold={true} style={styles.loginButtonText}>LOGIN</MyText>
+                            {
+                                !isLoading ?
+                                    <MyText bold={true} style={styles.loginButtonText}>LOGIN</MyText> :
+                                    <View>
+                                        <ActivityIndicator size="small" color="#fff"></ActivityIndicator>
+                                    </View>
+                            }
+
                         </View>
                     </TouchableComponent>
                 </View>
@@ -59,7 +109,7 @@ const LoginScreen = (props) => {
                 </View>
 
             </View>
-        </View>
+        </View >
     )
 };
 
@@ -87,6 +137,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         color: CustomColors.primaryColor,
         height: 60
+    },
+    invalidInput: {
+        borderWidth: 1,
+        borderColor: 'red'
     },
     loginButton: {
         borderRadius: 10,

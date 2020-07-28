@@ -1,4 +1,5 @@
 export const apiUrl = 'http://assafinaonline.com/wp-json/wp/v2/';
+export const baseUrl = 'http://assafinaonline.com/';
 
 export const decodeString = (text) => {
     var resolvedText = text

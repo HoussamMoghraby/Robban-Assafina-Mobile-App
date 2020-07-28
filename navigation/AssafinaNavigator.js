@@ -103,7 +103,13 @@ const CategoriesNavigator = createStackNavigator(
 const ArchivesNavigator = createStackNavigator(
     {
         Archives: { screen: ArchivesScreen },
-        ArchivePost: { screen: ArchiveScreen }
+        ArchivePost: { screen: ArchiveScreen },
+        Login: {
+            screen: LoginScreen,
+            navigationOptions: {
+                headerTitleAlign: 'center'
+            }
+        }
     }, defaultStackNavigatorConfig
 );
 
@@ -124,9 +130,7 @@ const MoreNavigator = createStackNavigator(
         Login: {
             screen: LoginScreen,
             navigationOptions: {
-                //headerStyle: { backgroundColor: '#fff' },
-                headerTitleAlign: 'center',
-                //headerTitleStyle: { color: Colors.primaryColor }
+                headerTitleAlign: 'center'
             }
         }
     }, defaultStackNavigatorConfig

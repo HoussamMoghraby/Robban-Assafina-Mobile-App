@@ -11,6 +11,8 @@ import * as _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import * as CategoriesActions from '../store/actions/categories';
 import * as PostsActions from '../store/actions/posts';
+import LoginScreen from './LoginScreen';
+import * as AuthActions from '../store/actions/auth';
 const CARD_HEIGHT = 'auto';
 const IMAGE_HEIGHT = 244.5;
 //let archivesCategories = Enumerable.asEnumerable(categories_data).Where(c => c.parent == 202).OrderByDescending(c => c.name).ToArray();
@@ -28,17 +30,61 @@ const getPostMediaUrl = (post) => {
 };
 
 const ArchivesScreen = (props) => {
+    const userToken = useSelector(state => state.auth.token);
+    const [tokenFetched, setTokenFetched] = useState(false);
+    //const [isUserLoggedIn, setIsUserLoggedIn] = useState(userToken ? true : false);
+    debugger;
+    const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     console.log('props changed');
+    //     console.log(props.navigation.getParam('loggedIn'));
+    //     if (props.navigation.getParam('loggedIn')) {
+    //         setIsUserLoggedIn(true);
+    //     }
+    // }, [props.navigation]);
+    // useEffect(() => {
+
+
+    // }, [props]);
+
+    useEffect(() => {
+        const getUserToken = async () => {
+            try {
+                await dispatch(AuthActions.fetchUserToken());
+                setTokenFetched(true);
+                debugger;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        getUserToken();
+    }, [dispatch]);
+
+    useEffect(() => {
+        console.log(`userToken: ${userToken}`);
+        if (!userToken && tokenFetched) {
+            console.log('Go to login');
+            props.navigation.replace('Login');
+            //return (
+            //<LoginScreen {...props}></LoginScreen>
+            //)
+        }
+    }, [tokenFetched]);
+
     const [isLoading, setIsLoading] = useState(true);
     const [isArchivesLoading, setIsArchivesLoading] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState();
-    const dispatch = useDispatch();
+
     useEffect(() => {
         const getCategories = async () => {
             setIsLoading(true);
             await dispatch(CategoriesActions.fetchArchivesCategories());
             setIsLoading(false);
         }
-        getCategories();
+        if (userToken)
+            getCategories();
     }, [dispatch]);
 
     const archivesCategories = useSelector(state => state.categories.archiveCategories);
@@ -51,7 +97,6 @@ const ArchivesScreen = (props) => {
     // archives = [...archives, ...archives, ...archives, ...archives, ...archives, ...archives, ...archives, ...archives, ...archives];
     //archives.forEach((a, i) => { a.id = (i < archives.length - 1) ? i.toString() : 1000; });
     //console.log('archives');
-    //props.navigation.push('Login');//test
 
 
     useEffect(() => {
@@ -81,7 +126,7 @@ const ArchivesScreen = (props) => {
                 console.log(error);
             }
         }
-        if (selectedCategory) {
+        if (selectedCategory && userToken) {
             console.log('Get Archives');
             getArchives();
         }
