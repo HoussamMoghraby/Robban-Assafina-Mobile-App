@@ -1,5 +1,9 @@
 export const apiUrl = 'http://assafinaonline.com/wp-json/wp/v2/';
 export const baseUrl = 'http://assafinaonline.com/';
+export const sys_admin = {
+    username: "assafinamobileapp_sysadmin@ainbz.com",
+    password: "R&A#grT2sVwkeL8s$yXRW8Xb"
+}
 
 export const decodeString = (text) => {
     var resolvedText = text

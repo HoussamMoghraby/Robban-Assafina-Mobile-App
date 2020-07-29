@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
 
 const LoginScreen = (props) => {
-    const [userNameInput, setUsernameInput] = useState('houssammoghraby@gmail.com');
-    const [passwordInput, setPasswordInput] = useState('myp@ss@WS123');
+    const [userNameInput, setUsernameInput] = useState(/*'houssammoghraby@gmail.com'*/);
+    const [passwordInput, setPasswordInput] = useState(/*'myp@ss@WS123'*/);
     const [isLoading, setIsLoading] = useState();
     const [errorText, setErrorText] = useState(null);
     const dispatch = useDispatch();
@@ -27,6 +27,7 @@ const LoginScreen = (props) => {
             }
             finally {
                 setIsLoading(false);
+                //setErrorText(null);
             }
         }
         if (!isLoading)
@@ -101,7 +102,7 @@ const LoginScreen = (props) => {
                     </TouchableComponent>
                 </View>
                 <View style={styles.signupButtonContainer}>
-                    <TouchableComponent style={styles.signupButton}>
+                    <TouchableComponent style={styles.signupButton} onPress={() => { props.navigation.push('Signup'); }}>
                         <View>
                             <MyText style={styles.signupButtonText}>New here? Create account.</MyText>
                         </View>

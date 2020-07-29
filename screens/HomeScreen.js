@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Image } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking } from 'react-native';
 import PostsList from '../components/PostsList';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomColors from '../constants/CustomColors';
@@ -22,11 +22,13 @@ const HomeScreen = (props) => {
     return (
         <View style={styles.screen}>
             <PostsList {...props} showBetweenPostsSponsors={true} scrollToTop={scrollToTop}></PostsList>
-            <View style={styles.sponsorsContainer}>
-                <ImageBackground style={styles.sponsorsImage} source={{
-                    uri: 'https://assafinaonline.com/wp-content/uploads/MUSASINO-BANNER.gif'
-                }}></ImageBackground>
-            </View>
+            <TouchableComponent onPress={() => { Linking.openURL('https://www.musasino.biz/product/lax'); }}>
+                <View style={styles.sponsorsContainer}>
+                    <ImageBackground style={styles.sponsorsImage} source={{
+                        uri: 'https://assafinaonline.com/wp-content/uploads/MUSASINO-BANNER.gif'
+                    }}></ImageBackground>
+                </View>
+            </TouchableComponent>
         </View >
     )
 };

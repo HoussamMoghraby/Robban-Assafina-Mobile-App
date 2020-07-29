@@ -20,6 +20,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomColors from '../constants/CustomColors';
 import MoreScreen from '../screens/MoreScreen';
 import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 
 const defaultStackNavigatorConfig = {
     mode: 'modal',
@@ -108,6 +109,13 @@ const ArchivesNavigator = createStackNavigator(
             screen: LoginScreen,
             navigationOptions: {
                 headerTitleAlign: 'center'
+            }
+        },
+        Signup: {
+            screen: SignupScreen,
+            navigationOptions: {
+                headerTitleAlign: 'center',
+                headerTitle: 'Register'
             }
         }
     }, defaultStackNavigatorConfig

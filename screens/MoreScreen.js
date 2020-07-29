@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Linking } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Linking, Alert } from 'react-native';
 import MyText from '../components/MyText';
 import CustomColors from '../constants/CustomColors';
 import TouchableComponent from '../components/TouchableComponent';
@@ -20,7 +20,21 @@ const MoreScreen = (props) => {
         const logout = async () => {
             await dispatch(AuthActions.logoutUser());
         }
-        logout();
+        Alert.alert(
+            'Are you sure you want to logout?',
+            '',
+            [
+                {
+                    text: 'No',
+                    onPress: () => { console.log('no') }
+                },
+                {
+                    text: 'Yes',
+                    onPress: () => { console.log('yes'); logout(); }
+                }
+
+            ]
+        )
     }, [userToken, dispatch]);
 
     useEffect(() => {
