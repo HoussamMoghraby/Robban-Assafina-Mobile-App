@@ -2,6 +2,26 @@ import { baseUrl } from "../../helpers/apiUtils";
 import AsyncStorage from "@react-native-community/async-storage";
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 export const FETCH_USER_TOKEN = 'FETCH_USER_TOKEN';
+export const LOGOUT_USER = 'LOGOUT_USER';
+
+
+
+export const logoutUser = () => {
+    return async dispatch => {
+        try {
+            console.log('logging out');
+            //async code
+            await AsyncStorage.setItem('userToken', '');
+            debugger;
+            dispatch({
+                type: LOGOUT_USER
+            });
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+}
 
 
 export const fetchUserToken = () => {
@@ -10,9 +30,15 @@ export const fetchUserToken = () => {
             console.log('fetching token');
             //async code
             var savedToken = await AsyncStorage.getItem('userToken');
+            var savedDisplayName = await AsyncStorage.getItem('userDisplayName');
+            var savedEmail = await AsyncStorage.getItem('userEmail');
             console.log('saved Token:' + savedToken);
+            //savedToken = null;
             dispatch({
-                type: FETCH_USER_TOKEN, token: savedToken
+                type: FETCH_USER_TOKEN,
+                token: savedToken,
+                email: savedEmail,
+                displayName: savedDisplayName
             });
         }
         catch (error) {
@@ -44,6 +70,8 @@ export const authenticateUser = (userName, userPassword) => {
             }
             console.log(`authentication done`);
             await AsyncStorage.setItem('userToken', resData.token);
+            await AsyncStorage.setItem('userDisplayName', resData.user_display_name);
+            await AsyncStorage.setItem('userEmail', resData.user_email);
 
             //debugger;
             dispatch({

@@ -71,7 +71,7 @@ const ArchivesScreen = (props) => {
             //<LoginScreen {...props}></LoginScreen>
             //)
         }
-    }, [tokenFetched]);
+    }, [userToken, tokenFetched]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [isArchivesLoading, setIsArchivesLoading] = useState(false);
@@ -85,7 +85,7 @@ const ArchivesScreen = (props) => {
         }
         if (userToken)
             getCategories();
-    }, [dispatch]);
+    }, [dispatch, userToken]);
 
     const archivesCategories = useSelector(state => state.categories.archiveCategories);
     const categories = Enumerable.asEnumerable(archivesCategories).OrderByDescending(c => c.name).ToArray();
@@ -130,7 +130,7 @@ const ArchivesScreen = (props) => {
             console.log('Get Archives');
             getArchives();
         }
-    }, [selectedCategory, dispatch]);
+    }, [selectedCategory, dispatch, userToken]);
 
     const onRefresh = () => {
         setRefreshing(true);
