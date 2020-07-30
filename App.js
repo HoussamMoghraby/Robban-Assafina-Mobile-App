@@ -13,6 +13,17 @@ import authReducer from './store/reducers/auth';
 import ReduxThunk from 'redux-thunk';
 import { isPlatformAndroid } from './helpers/Platform';
 
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: true,
+      shouldShowAlert: true
+    }
+  }
+});
+
 enableScreens();
 
 const rootReducer = combineReducers({
