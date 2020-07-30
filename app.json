@@ -26,7 +26,8 @@
     },
     "android": {
       "package": "com.assafinaonline.robbanassafina",
-      "versionCode": 1
+      "versionCode": 1,
+      "useNextNotificationsApi": true
     }
   }
 }

@@ -5,10 +5,25 @@ import MyText from '../components/MyText';
 import TouchableComponent from '../components/TouchableComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
+import * as Notifications from 'expo-notifications';
 
 const LoginScreen = (props) => {
-    const [userNameInput, setUsernameInput] = useState(/*'houssammoghraby@gmail.com'*/);
-    const [passwordInput, setPasswordInput] = useState(/*'myp@ss@WS123'*/);
+
+    const scheduleLocalNotification = /*useCallback(*/() => {
+        console.log('Schedule welcome notification');
+        Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Welcome to Robban Assafina Magazine',
+                body: 'Click here to see all our archives'
+            },
+            trigger: {
+                seconds: 10
+            }
+        });
+    }/*, [dispatch])*/
+
+    const [userNameInput, setUsernameInput] = useState('houssammoghraby@gmail.com');
+    const [passwordInput, setPasswordInput] = useState('myp@ss@WS123');
     const [isLoading, setIsLoading] = useState();
     const [errorText, setErrorText] = useState(null);
     const dispatch = useDispatch();
@@ -19,6 +34,7 @@ const LoginScreen = (props) => {
                 setIsLoading(true);
                 await dispatch(AuthActions.authenticateUser(userNameInput, passwordInput));
                 setErrorText(null);
+                scheduleLocalNotification();
                 props.navigation.replace('Archives');
             }
             catch (error) {
@@ -88,7 +104,7 @@ const LoginScreen = (props) => {
                 </View>
 
                 <View>
-                    <TouchableComponent style={styles.loginButton} onPress={() => { authenticateUser() }}>
+                    <TouchableComponent style={styles.loginButton} onPress={() => { authenticateUser(); /*scheduleLocalNotification();*/ }}>
                         <View>
                             {
                                 !isLoading ?
