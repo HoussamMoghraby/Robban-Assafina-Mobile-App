@@ -5,22 +5,21 @@ import MyText from '../components/MyText';
 import TouchableComponent from '../components/TouchableComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
-//import * as Notifications from 'expo-notifications';
+import * as Notifications from 'expo-notifications';
 
 const LoginScreen = (props) => {
 
     const scheduleLocalNotification = /*useCallback(*/() => {
-        // console.log('Schedule welcome notification');
-        // console.log(Notifications);
-        // Notifications.scheduleNotificationAsync({
-        //     content: {
-        //         title: 'Welcome to Robban Assafina Magazine',
-        //         body: 'Click here stupid'
-        //     },
-        //     trigger: {
-        //         seconds: 10
-        //     }
-        // });
+        console.log('Schedule welcome notification');
+        Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Welcome to Robban Assafina Magazine',
+                body: 'Click here to see all our archives'
+            },
+            trigger: {
+                seconds: 10
+            }
+        });
     }/*, [dispatch])*/
 
     const [userNameInput, setUsernameInput] = useState('houssammoghraby@gmail.com');
@@ -36,7 +35,7 @@ const LoginScreen = (props) => {
                 await dispatch(AuthActions.authenticateUser(userNameInput, passwordInput));
                 setErrorText(null);
                 scheduleLocalNotification();
-                //props.navigation.replace('Archives');
+                props.navigation.replace('Archives');
             }
             catch (error) {
                 console.info(error);
@@ -105,7 +104,7 @@ const LoginScreen = (props) => {
                 </View>
 
                 <View>
-                    <TouchableComponent style={styles.loginButton} onPress={() => { /*authenticateUser()*/ scheduleLocalNotification(); }}>
+                    <TouchableComponent style={styles.loginButton} onPress={() => { authenticateUser(); /*scheduleLocalNotification();*/ }}>
                         <View>
                             {
                                 !isLoading ?

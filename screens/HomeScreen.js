@@ -6,9 +6,23 @@ import CustomColors from '../constants/CustomColors';
 import CustomHeaderButton from '../components/CustomHeaderButton';
 import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
+import * as Permissions from 'expo-permissions';
 
 const SPONSORS_IMAGE_HEIGHT = 70;
 const HomeScreen = (props) => {
+
+    useEffect(() => {
+        Permissions.getAsync(Permissions.NOTIFICATIONS).then((statusObj) => {
+            if (statusObj.status !== 'granted') {
+                return Permissions.askAsync(Permissions.NOTIFICATIONS);
+            }
+            return statusObj;
+        }).then((statusObj) => {
+            if (statusObj.status !== 'granted') {
+                return;
+            }
+        });
+    }, [])
 
     const [scrollToTop, setScrollToTop] = useState([]);
     const logoClickHandler = useCallback(() => {
