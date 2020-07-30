@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Robban Assafina",
+    "slug": "robban-assafina-app",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon-new-1.png",
+    "splash": {
+      "image": "./assets/splash-new-1.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#cae9fb"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.assafinaonline.robbanassafina",
+      "versionCode": 1
+    }
+  }
+}
