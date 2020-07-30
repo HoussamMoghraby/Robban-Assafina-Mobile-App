@@ -7,6 +7,7 @@ import CustomHeaderButton from '../components/CustomHeaderButton';
 import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
 import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 
 const SPONSORS_IMAGE_HEIGHT = 70;
 const HomeScreen = (props) => {
@@ -26,7 +27,26 @@ const HomeScreen = (props) => {
                 return;
             }
         });
-    }, [])
+    }, []);
+
+
+    useEffect(() => {
+        //Background notification handler
+        const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response);
+        });
+
+        //Foreground notification handler
+        const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+            console.log(notification);
+        });
+
+        return () => {
+            backgroundSubscription.remove();
+            foregroundSubscription.remove();
+        }
+    }, []);
+
 
     const [scrollToTop, setScrollToTop] = useState([]);
     const logoClickHandler = useCallback(() => {

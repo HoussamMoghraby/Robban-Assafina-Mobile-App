@@ -14,10 +14,10 @@ const LoginScreen = (props) => {
         Notifications.scheduleNotificationAsync({
             content: {
                 title: 'Welcome to Robban Assafina Magazine',
-                body: 'Click here to read our latest articles and access all our archives.'
+                body: 'You can now read our latest articles and access our archives.'
             },
             trigger: {
-                seconds: 5
+                seconds: 10
             }
         });
     }/*, [dispatch])*/
