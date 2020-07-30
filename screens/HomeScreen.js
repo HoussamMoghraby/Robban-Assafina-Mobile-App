@@ -20,9 +20,20 @@ const HomeScreen = (props) => {
             return statusObj;
         }).then((statusObj) => {
             if (statusObj.status !== 'granted') {
-                return;
+                throw new Error("Permission not granted");
             }
-        });
+        }).then(() => {
+            console.log('Getting push token');
+            return Notifications.getExpoPushTokenAsync();
+        }).then(response => {
+            const token = response.data;
+            //ExponentPushToken[ZR3VtsNxwQZZizhEoDZlgY]
+            console.log(token);
+        })
+            .catch((err) => {
+                console.log(err);
+                return null;
+            })
     }, []);
 
 
