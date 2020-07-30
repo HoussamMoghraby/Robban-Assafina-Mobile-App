@@ -12,13 +12,17 @@ const SPONSORS_IMAGE_HEIGHT = 70;
 const HomeScreen = (props) => {
 
     useEffect(() => {
+        console.log('Permissions');
         Permissions.getAsync(Permissions.NOTIFICATIONS).then((statusObj) => {
             if (statusObj.status !== 'granted') {
+                console.log('not granted');
                 return Permissions.askAsync(Permissions.NOTIFICATIONS);
             }
+            console.log('granted');
             return statusObj;
         }).then((statusObj) => {
             if (statusObj.status !== 'granted') {
+                console.log('not granted');
                 return;
             }
         });
