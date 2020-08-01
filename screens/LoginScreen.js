@@ -22,8 +22,8 @@ const LoginScreen = (props) => {
         });
     }/*, [dispatch])*/
 
-    const [userNameInput, setUsernameInput] = useState('houssammoghraby@gmail.com');
-    const [passwordInput, setPasswordInput] = useState('myp@ss@WS123');
+    const [userNameInput, setUsernameInput] = useState(/*'houssammoghraby@gmail.com'*/);
+    const [passwordInput, setPasswordInput] = useState(/*'myp@ss@WS123'*/);
     const [isLoading, setIsLoading] = useState();
     const [errorText, setErrorText] = useState(null);
     const dispatch = useDispatch();

@@ -11,11 +11,47 @@ import * as Notifications from 'expo-notifications';
 import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as PostsActions from '../store/actions/posts';
+var DomParser = require('react-native-html-parser').DOMParser;
+
+const getSponsorsImages = (dom, tag) => {
+    let images = [];
+    for (let i = 0; i < dom.length; i++) {
+        let link = dom[i].getAttribute('href');
+        let imageUrl = dom[i].getElementsByTagName('img')[0].getAttribute('src');
+        let title = dom[i].getElementsByTagName('img')[0].getAttribute('title');
+        images.push({ link: link, imageUrl: imageUrl, title: title, tag: tag });
+    }
+    return images;
+}
 
 const SPONSORS_IMAGE_HEIGHT = 70;
 const HomeScreen = (props) => {
     //const pushToken = useSelector(state => state.auth.pushToken);
     const dispatch = useDispatch();
+    const sponsorsHTML = useSelector(state => state.posts.sponsorsHtmlString);
+    const [sponsorsList, setSponsorsList] = useState([]);
+
+    useEffect(() => {
+        const fetchSponsors = async () => {
+            try { await dispatch(PostsActions.fetchSponsorsHTML()); }
+            catch (error) { console.log(error); }
+        }
+        fetchSponsors();
+    }, [dispatch]);
+
+    useEffect(() => {
+        const setTopSponsorsList = () => {
+            console.log('Setting Top Sponsors');
+            var doc = new DomParser().parseFromString(sponsorsHTML, 'text/html');
+            var topSponsorsDOM = doc.getElementById('top-banner-wrapper').getElementsByTagName('a');
+            var imagesList = [];
+            imagesList = getSponsorsImages(topSponsorsDOM, 'top');
+            setSponsorsList(imagesList);
+        }
+        if (sponsorsHTML)
+            setTopSponsorsList();
+    }, [dispatch, sponsorsHTML])
 
     // useEffect(() => {
     //     const getSavedToken = async () => {
@@ -107,13 +143,25 @@ const HomeScreen = (props) => {
     return (
         <View style={styles.screen}>
             <PostsList {...props} showBetweenPostsSponsors={true} scrollToTop={scrollToTop}></PostsList>
-            <TouchableComponent onPress={() => { Linking.openURL('https://www.musasino.biz/product/lax'); }}>
-                <View style={styles.sponsorsContainer}>
-                    <ImageBackground style={styles.sponsorsImage} source={{
-                        uri: 'https://assafinaonline.com/wp-content/uploads/MUSASINO-BANNER.gif'
-                    }}></ImageBackground>
-                </View>
-            </TouchableComponent>
+            {
+                (sponsorsList && sponsorsList.length > 0) ?
+                    <View style={{ width: '100%', backgroundColor: '#eee' }}>
+                        <View style={styles.sponsorsContainer}>
+                            {
+                                sponsorsList.map(sponsor => (
+                                    <View style={{ ...styles.sponsorWrapper, ...{ maxWidth: `${(100 / sponsorsList.length).toString()}%` } }} key={sponsor.imageUrl}>
+                                        <TouchableComponent>
+                                            <ImageBackground style={styles.sponsorsImage} source={{
+                                                uri: sponsor.imageUrl
+                                            }} resizeMode="contain"></ImageBackground>
+                                        </TouchableComponent>
+                                    </View>
+                                ))
+                            }
+                        </View>
+                    </View>
+                    : <View></View>
+            }
         </View >
     )
 };
@@ -150,12 +198,22 @@ const styles = StyleSheet.create({
     sponsorsContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        elevation: 2,
-        borderTopColor: '#ccc'
+        //elevation: 2,
+        borderTopColor: '#ccc',
+        borderTopWidth: 1,
+        alignItems: 'flex-start',
+        width: '100%'
+    },
+    sponsorWrapper: {
+        width: '100%',
+        //maxWidth: '50%'
     },
     sponsorsImage: {
         width: '100%',
-        height: SPONSORS_IMAGE_HEIGHT
+        height: SPONSORS_IMAGE_HEIGHT,
+        borderColor: '#eee',
+        borderRightWidth: 1,
+        borderLeftWidth: 1
     }
 });
 

@@ -8,7 +8,7 @@ export const UPDATE_POSTS_MEDIAS = 'UPDATE_POSTS_MEDIAS';
 export const FETCH_ARCHIVES = 'FETCH_ARCHIVES';
 export const FETCH_FAVORITES_NEW = 'FETCH_FAVORITES_NEW';
 export const TOGGLE_FAVORITE_NEW = 'TOGGLE_FAVORITE_NEW';
-
+export const FETCH_SPONSORS_HTML = 'FETCH_SPONSORS_HTML';
 // export const toggleFavorite = (postId) => {
 //     return async dispatch => {
 //         try {
@@ -199,6 +199,23 @@ export const fetchArchives = (categoryId, start = 1, limit = DEFAULT_ARCHIVES_LI
             dispatch({ type: FETCH_ARCHIVES, archives: resData, page: start, stopPagination: stopPagination, categoryId: categoryId });
         } catch (error) {
             throw error;
+        }
+    }
+}
+
+
+export const fetchSponsorsHTML = () => {
+    return async dispatch => {
+        //async code
+        try {
+            console.log('fetching sponsors');
+            var response = await fetch('https://assafinaonline.com/about-us/');
+            var htmlContent = await response.text();
+            //var htmlContent = '';
+            dispatch({ type: FETCH_SPONSORS_HTML, sponsorsHTML: htmlContent });
+        }
+        catch (error) {
+            console.log(error);
         }
     }
 }

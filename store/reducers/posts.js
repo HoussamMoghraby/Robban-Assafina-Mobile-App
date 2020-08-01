@@ -1,5 +1,5 @@
 //import { posts_data } from '../../data/posts';
-import { TOGGLE_FAVORITE, FETCH_ARCHIVES, FETCH_POSTS, SEARCH_POSTS, UPDATE_POSTS_MEDIAS, TOGGLE_FAVORITE_NEW, FETCH_FAVORITES_NEW } from '../actions/posts';
+import { TOGGLE_FAVORITE, FETCH_ARCHIVES, FETCH_POSTS, SEARCH_POSTS, UPDATE_POSTS_MEDIAS, TOGGLE_FAVORITE_NEW, FETCH_FAVORITES_NEW, FETCH_SPONSORS_HTML } from '../actions/posts';
 export const initialState = {
     posts: [],
     filteredPosts: [],
@@ -10,11 +10,14 @@ export const initialState = {
     categoryPosts: [],
     stopCategoryPagination: false,
     archivePosts: new Map(),
-    stopArchivesPagination: false
+    stopArchivesPagination: false,
+    sponsorsHtmlString: null
 }
 
 const postsReducer = (state = initialState, action) => {
     switch (action.type) {
+        case FETCH_SPONSORS_HTML:
+            return { ...state, sponsorsHtmlString: action.sponsorsHTML }
         case FETCH_FAVORITES_NEW:
         case TOGGLE_FAVORITE_NEW:
             return { ...state, favoritePosts: action.favs }
