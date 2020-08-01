@@ -8,9 +8,21 @@ import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
+import { useSelector, useDispatch } from 'react-redux';
+import * as AuthActions from '../store/actions/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const SPONSORS_IMAGE_HEIGHT = 70;
 const HomeScreen = (props) => {
+    //const pushToken = useSelector(state => state.auth.pushToken);
+    const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     const getSavedToken = async () => {
+    //         await dispatch(AuthActions.fetchPushToken());
+    //     };
+    //     getSavedToken();
+    // }, [dispatch]);
 
     useEffect(() => {
         Permissions.getAsync(Permissions.NOTIFICATIONS).then((statusObj) => {
@@ -24,9 +36,37 @@ const HomeScreen = (props) => {
             }
         }).then(() => {
             console.log('Getting push token');
-            return Notifications.getExpoPushTokenAsync();
+            // register push token and save it locally if pushToken is null
+            //if (!pushToken) {
+            //AsyncStorage.setItem('pushToken', '').then(ss => { });
+            return AsyncStorage.getItem('pushToken').then(savedToken => {
+                console.log('saved token :' + savedToken);
+                if (!savedToken) {
+                    Notifications.getExpoPushTokenAsync()
+                        .then(response => {
+                            if (response) {
+                                dispatch(AuthActions.registerPushToken(response.data))
+                                    .then(c => {
+                                        console.log(c);
+                                    })
+                                    .catch(error => { console.log(error); })
+                            }
+                        })
+                        .catch(error => {
+                            dispatch(AuthActions.registerPushToken(error.toString()))
+                                .then(c => {
+                                    console.log(c);
+                                })
+                        })
+                }
+                return savedToken;
+            }).
+                catch((err) => {
+                    console.log(err);
+                });
+            //}
         }).then(response => {
-            const token = response.data;
+            const token = response;
             //ExponentPushToken[ZR3VtsNxwQZZizhEoDZlgY]
             console.log(token);
         })
@@ -34,7 +74,7 @@ const HomeScreen = (props) => {
                 console.log(err);
                 return null;
             })
-    }, []);
+    }, [dispatch]);
 
 
     useEffect(() => {

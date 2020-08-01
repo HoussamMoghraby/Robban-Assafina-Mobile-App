@@ -1,14 +1,20 @@
-import { AUTHENTICATE_USER, FETCH_USER_TOKEN, LOGOUT_USER } from '../actions/auth';
+import { AUTHENTICATE_USER, FETCH_USER_TOKEN, LOGOUT_USER, FETCH_PUSH_TOKEN } from '../actions/auth';
 
 export const initialState = {
     token: null,
     email: null,
-    displayName: null
+    displayName: null,
+    pushToken: null
 }
 
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
+        case FETCH_PUSH_TOKEN:
+            return {
+                ...state,
+                pushToken: action.pushToken
+            }
         case LOGOUT_USER:
             return {
                 ...state,

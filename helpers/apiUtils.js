@@ -1,5 +1,7 @@
 export const apiUrl = 'http://assafinaonline.com/wp-json/wp/v2/';
 export const baseUrl = 'http://assafinaonline.com/';
+//export const notificationServerUrl = 'http://assafinanotificationsapi.radixsarl.com/api/';
+export const notificationServerUrl = 'http://10.166.1.124:9797/api/';
 export const sys_admin = {
     username: "assafinamobileapp_sysadmin@ainbz.com",
     password: "R&A#grT2sVwkeL8s$yXRW8Xb"

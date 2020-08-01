@@ -1,9 +1,10 @@
-import { baseUrl, sys_admin, apiUrl } from "../../helpers/apiUtils";
+import { baseUrl, sys_admin, apiUrl, notificationServerUrl } from "../../helpers/apiUtils";
 import AsyncStorage from "@react-native-community/async-storage";
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 export const FETCH_USER_TOKEN = 'FETCH_USER_TOKEN';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const REGISTER_USER = 'REGISTER_USER';
+export const FETCH_PUSH_TOKEN = 'FETCH_PUSH_TOKEN';
 
 export const registerUser = (username, first_name, last_name, password) => {
     return async dispatch => {
@@ -158,6 +159,67 @@ export const authenticateUser = (userName, userPassword) => {
                 token: resData.token,
                 email: resData.user_email,
                 displayName: resData.user_display_name
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const fetchPushToken = () => {
+    return async dispatch => {
+        try {
+            console.log('fetching push token');
+            //async code
+            var savedToken = await AsyncStorage.getItem('pushToken');
+            console.log('saved push token:' + savedToken);
+            //savedToken = null;
+            dispatch({
+                type: FETCH_PUSH_TOKEN,
+                pushToken: savedToken
+            });
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+}
+
+
+
+export const registerPushToken = (token) => {
+    return async dispatch => {
+        try {
+            //any async code
+            debugger;
+            let url = `${notificationServerUrl}Token`;
+            console.log(`registering token:  ${token}`);
+            const response = await fetch(url,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {
+                            token: token,
+                            username: null
+                        }
+                    ),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+            var resData = await response.json();
+            console.log(resData);
+            if (resData.status && resData.status === 'failed') {
+                throw 'COULD_NOT_REGISTER_TOKEN';
+            }
+            console.log(`token registration done`);
+            await AsyncStorage.setItem('pushToken', token);
+
+            //debugger;
+            dispatch({
+                type: FETCH_PUSH_TOKEN,
+                pushToken: token
             });
         } catch (error) {
             throw error;
