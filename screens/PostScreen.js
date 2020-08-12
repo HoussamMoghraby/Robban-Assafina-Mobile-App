@@ -13,7 +13,7 @@ import CustomHeaderButton from '../components/CustomHeaderButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleFavorite } from '../store/actions/posts';
 import { decodeString } from '../helpers/apiUtils';
-
+import Video from 'react-native-video';
 const IMAGE_HEIGHT = 250;
 let customHeaderComponent = (props) => {
     return (
@@ -130,7 +130,47 @@ const PostScreen = (props) => {
                             classesStyles={{ 'my-radix-node': { fontSize: fontSize } }}
                             //tagsStyles={{ a: { fontSize: fontSize }, p: { fontSize: fontSize } }}
                             renderers={{
+                                blockquote: {
+                                    renderer: (htmlAttribs, node, parent, children, innerHTML) => {
+                                        if (htmlAttribs.class && htmlAttribs.class == 'twitter-tweet') {
+                                            // console.log(htmlAttribs)
+                                            // console.log(node)
+                                            // console.log(parent)
+                                            // console.log(children)
+                                            // console.log(innerHTML)
+                                            console.log("twitter", children.rawChildren[1].parent.innerHTML)
+                                            const content = `<figure class="wp-block-embed-twitter aligncenter wp-block-embed is-type-rich is-provider-twitter">
+                                            <div class="wp-block-embed__wrapper">${children.rawChildren[1].parent.innerHTML}<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+                                            </figure>`;
+                                            return (
+                                                <ScrollView style={{ flex: 1, width: '100%', maxHeight: 550, backgroundColor: 'yellow' }}>
+                                                    <WebView onShouldStartLoadWithRequest={(event) => {
+                                                        Linking.openURL(event.url);
+                                                        return false;
+                                                    }} allowsLinkPreview={false} overScrollMode="always" scrollEnabled={true} scalesPageToFit={false} style={{ flex: 1, height: 550 }} source={{ html: content }} javaScriptEnabled={true}></WebView>
+                                                </ScrollView>
+                                            )
+                                        }
+                                        return node;
+                                    }
+                                },
+                                // figure: (e, e1) => {
+                                //     console.log('Figure');
+                                //     console.log(e);
+                                //     //console.log(e1);
+                                //     // return (
+                                //     //     <View><Text>Figure</Text></View>
+                                //     // )
+                                // },
+                                // figure: (e) => {
+                                //     console.log(e);
+                                //     return (
+                                //         <WebView style={{ width: 400, height: 400, backgroundColor: 'red' }} javaScriptEnabled={true} source={{ uri: 'https://t.co/iOFzIbBxC3' }} />
+                                //     )
+                                // },
                                 iframe: (e) => {
+                                    console.log('iframe');
+                                    console.log(e);
                                     return (
                                         <TouchableComponent key={Math.random()} onPress={() => { Linking.openURL(e.src) }}>
                                             {e.src.includes('youtube') ?
@@ -144,10 +184,30 @@ const PostScreen = (props) => {
                                                         <FontAwesome5 name="youtube" size={40} color="#db4b3f" ></FontAwesome5>
                                                     </View>
                                                 </View>
-                                                : <View></View>
+                                                :
+                                                (
+                                                    <View></View>
+                                                )
                                             }
                                         </TouchableComponent>
                                     )
+                                }
+                            }}
+                            alterChildren={(node) => {
+                                const { children, name } = node;
+                                var cc;
+                                if (name === 'figure') {
+                                    cc = node;
+                                    debugger;
+                                    //console.log(cc);
+                                    //return children.splice(0,1);
+                                }
+                            }}
+                            onParsed={(dom, RNElements) => {
+                                //console.log(dom);
+                                //console.log(RNElements);
+                                const script = {
+                                    wrapper: 'script'
                                 }
                             }}
                             debug={false}

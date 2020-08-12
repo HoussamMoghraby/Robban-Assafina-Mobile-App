@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, NativeModules, StatusBar, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, NativeModules, StatusBar, ImageBackground, Dimensions, Alert, I18nManager } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import AssafinaNavigator from './navigation/AssafinaNavigator';
@@ -23,6 +23,7 @@ Notifications.setNotificationHandler({
   }
 });
 
+I18nManager.allowRTL(false);
 enableScreens();
 
 const rootReducer = combineReducers({
@@ -56,35 +57,49 @@ export default function App() {
         const splashResponse = await fetch('http://assafinaonline.com/wp-json/wp/v2/media?search=Mobile_App_Splash_Screen&ordeby=date&order=desc');
         const splashResponseJSON = await splashResponse.json();
         console.log('setting custom splash');
+        //throw new Error('123');
         setCustomSplashURL(splashResponseJSON[0].media_details.sizes.full.source_url);
       }
       catch (error) {
         console.log(error);
-        setCustomSplashURL('');
+        setCustomSplashURL('ERROR');
       }
     }
-    if (loadCustomSplash == 0)
+    if (loadCustomSplash == 1)
       loadSplash();
   }, [loadCustomSplash]);
 
   if (!fontLoaded)
     return (<AppLoading startAsync={fetchFonts} onFinish={() => { setFontLoaded(true); setLoadCustomSplash(1); }}></AppLoading>);
 
-  if (loadCustomSplash == 1) {
+  if (loadCustomSplash == 1 && (!customSplashURL || customSplashURL == 'ERROR')) {
+    if (customSplashURL == 'ERROR') {
+      console.log('Could not load custom splash');
+      setTimeout(() => {
+        setLoadCustomSplash(2);
+      }, 500);
+    }
+    return (
+      // <View style={{ flex: 1, backgroundColor: '#e0f2fe', width: '100%', height: '100%' }}></View>
+      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: '#e0f2fe' }}>
+        <ImageBackground source={require('./assets/splash-new-4.png')} style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }} resizeMode="contain" >
+        </ImageBackground>
+      </View >
+    );
+  }
+
+  if (loadCustomSplash == 1 && customSplashURL && customSplashURL != 'ERROR') {
     setTimeout(() => {
       setLoadCustomSplash(2);
     }, 4000);
     return (
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-        {customSplashURL ?
-          <ImageBackground source={{ uri: customSplashURL }} style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }} resizeMode="contain" >
-          </ImageBackground>
-          : <View></View>
-        }
+        <ImageBackground source={{ uri: customSplashURL }} style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }} resizeMode="contain" >
+        </ImageBackground>
       </View >
     );
   }
-  else if (loadCustomSplash == 2) {
+  if (loadCustomSplash == 2) {
     return (
       <Provider store={store}>
         <SafeAreaView style={styles.appContainer}>
@@ -94,7 +109,7 @@ export default function App() {
     );
   }
   else
-    return (<View></View>)
+    return (<View style={{ justifyContent: 'center', alignItems: 'center' }}><Text>Could not open App</Text></View>)
 }
 
 const styles = StyleSheet.create({
