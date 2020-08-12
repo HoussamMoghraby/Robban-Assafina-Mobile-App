@@ -37,6 +37,14 @@ const MoreScreen = (props) => {
         )
     }, [userToken, dispatch]);
 
+    const handleLinkClick = useCallback((title, url) => {
+        // if (isPlatformAndroid()) {
+        props.navigation.push('Webpage', { title: title, url: url });
+        // }
+        // else
+        //     Linking.openURL(url)
+    }, [userToken, dispatch]);
+
     useEffect(() => {
         const getUserToken = async () => {
             try {
@@ -70,7 +78,7 @@ const MoreScreen = (props) => {
                         : <View></View>
                 }
                 <View style={styles.buttons}>
-                    <TouchableComponent onPress={() => { Linking.openURL('https://assafinaonline.com/contact-us/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('Contact Us', 'https://assafinaonline.com/contact-us/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Contact Us</MyText>
@@ -80,7 +88,7 @@ const MoreScreen = (props) => {
                             </View>
                         </View>
                     </TouchableComponent>
-                    <TouchableComponent onPress={() => { Linking.openURL('https://assafinaonline.com/about-us/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('About Us', 'https://assafinaonline.com/about-us/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>About Us</MyText>
@@ -90,7 +98,7 @@ const MoreScreen = (props) => {
                             </View>
                         </View>
                     </TouchableComponent>
-                    <TouchableComponent onPress={() => { Linking.openURL('https://assafinaonline.com/subscription-form/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('Subscribe With Us', 'https://assafinaonline.com/subscription-form/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Subscribe With Us</MyText>
@@ -100,7 +108,7 @@ const MoreScreen = (props) => {
                             </View>
                         </View>
                     </TouchableComponent>
-                    <TouchableComponent onPress={() => { Linking.openURL('https://assafinaonline.com/join-our-newsletter/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('Join Our Newsletter', 'https://assafinaonline.com/join-our-newsletter/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Join Our Newsletter</MyText>

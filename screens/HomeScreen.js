@@ -150,7 +150,7 @@ const HomeScreen = (props) => {
                             {
                                 sponsorsList.map(sponsor => (
                                     <View style={{ ...styles.sponsorWrapper, ...{ maxWidth: `${(100 / sponsorsList.length).toString()}%` } }} key={sponsor.imageUrl}>
-                                        <TouchableComponent>
+                                        <TouchableComponent onPress={() => { Linking.openURL(sponsor.link) }}>
                                             <ImageBackground style={styles.sponsorsImage} source={{
                                                 uri: sponsor.imageUrl
                                             }} resizeMode="contain"></ImageBackground>

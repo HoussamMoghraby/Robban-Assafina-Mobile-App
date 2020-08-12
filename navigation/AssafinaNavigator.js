@@ -21,6 +21,7 @@ import CustomColors from '../constants/CustomColors';
 import MoreScreen from '../screens/MoreScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
+import WebviewScreen from '../screens/WebviewScreen';
 
 const defaultStackNavigatorConfig = {
     mode: 'modal',
@@ -140,6 +141,9 @@ const MoreNavigator = createStackNavigator(
             navigationOptions: {
                 headerTitleAlign: 'center'
             }
+        },
+        Webpage: {
+            screen: WebviewScreen
         }
     }, defaultStackNavigatorConfig
 );
