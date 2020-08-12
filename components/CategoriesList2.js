@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, ImageBackground } from 'react-native';
 //import { categories_data } from '../data/categories';
 import TouchableComponent from './TouchableComponent';
 import MyText from './MyText';
@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchCategories } from '../store/actions/categories';
 import * as CategoriesActions from '../store/actions/categories';
 import { decodeString } from '../helpers/apiUtils';
-
+const CARD_HEIGHT = 200;
 const CategoriesList2 = (props) => {
     //const categories = categories_data.filter(c => c.parent != 81 && c.parent != 202 && c.count > 0);
     const [isLoading, setIsLoading] = useState(true);
@@ -37,33 +37,46 @@ const CategoriesList2 = (props) => {
     const renderCategory = (itemData) => {
         //debugger;
         const parentCategory = availableCategories.find(c => c.id == itemData.item.parent);
+        var categoryImage = '../assets/placeholder.png';
         return (
             <View style={styles.container} key={itemData.item.id}>
                 <TouchableComponent onPress={() => { props.navigation.push('CategoryPosts', { categoryId: itemData.item.id, categoryTitle: decodeString(itemData.item.name.trim()) }) }}>
-                    <View style={styles.cardContainer}>
-                        <View style={styles.topContainer}>
-                            <View style={styles.bubble}>
+                    <ImageBackground style={{ height: CARD_HEIGHT, width: '100%' }} source={
+                        itemData.item.id == 167 ? require('../assets/categories/167.jpg') :
+                            (itemData.item.id == 169 ? require('../assets/categories/169.jpg') :
+                                (itemData.item.id == 170 ? require('../assets/categories/170.jpg') :
+                                    (itemData.item.id == 182 ? require('../assets/categories/182.jpg') :
+                                        (itemData.item.id == 183 ? require('../assets/categories/183.jpg') :
+                                            (itemData.item.id == 184 ? require('../assets/categories/184.jpg') :
+                                                (itemData.item.id == 188 ? require('../assets/categories/188.jpg') :
+                                                    (itemData.item.id == 189 ? require('../assets/categories/189.jpg') :
+                                                        (itemData.item.id == 190 ? require('../assets/categories/190.jpg') : require(categoryImage))))))))
+                            )
+                    }>
+                        <View style={styles.imageBackgroundOverlay}>
+                            <View style={styles.cardContainer}>
+                                <View style={styles.topContainer}>
+                                    {/* <View style={styles.bubble}>
                                 <FontAwesome
                                     name="anchor"
                                     size={17}
                                     color="#fff"
                                 ></FontAwesome>
-                            </View>
-                            <View style={styles.topTextContainer}>
-                                <MyText numberOfLines={2} style={styles.topText}>{parentCategory ? parentCategory.name : ''}</MyText>
-                            </View>
-                        </View>
-                        <View style={styles.titleContainer}>
-                            <View style={styles.title}>
-                                <MyText style={styles.titleText} numberOfLines={3} bold={true}>{`${decodeString(itemData.item.name.trim())} ${itemData.item.description ? ' | ' + itemData.item.description : ''}`}</MyText>
-                            </View>
-                            {/* <View>
-                                <MyText numberOfLines={1} style={styles.countText}>{itemData.item.count}+ articles</MyText>
                             </View> */}
+                                    <View style={styles.topTextContainer}>
+                                        <MyText numberOfLines={2} style={styles.topText}>{parentCategory ? parentCategory.name : ''}</MyText>
+                                    </View>
+                                </View>
+                                <View style={styles.titleContainer}>
+                                    <View style={styles.title}>
+                                        <MyText style={styles.titleText} numberOfLines={3} bold={true}>{`${decodeString(itemData.item.name.trim())} ${itemData.item.description ? ' | ' + itemData.item.description : ''}`}</MyText>
+                                    </View>
+                                </View>
+                            </View>
                         </View>
-                    </View>
+                    </ImageBackground>
                 </TouchableComponent>
-            </View>
+            </View >
         )
     };
 
@@ -109,25 +122,27 @@ const styles = StyleSheet.create({
     container: {
         //width: '100%',
         //flex: 1,
-        width: (Dimensions.get('window').width / 2) - 20,
+        width: Dimensions.get('window').width - 20,
+        //width: (Dimensions.get('window').width / 2) - 20,
         margin: 10,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        height: 150,
+        height: CARD_HEIGHT,
         overflow: 'hidden',
         shadowColor: '#ccc',
         backgroundColor: '#fff'
     },
     cardContainer: {
         height: '100%',
-        padding: 10,
+        //padding: 10,
         justifyContent: 'space-between'
     },
     topContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        padding: 10,
     },
     bubble: {
         backgroundColor: CustomColors.primaryColor,
@@ -139,31 +154,36 @@ const styles = StyleSheet.create({
         borderRadius: 30
     },
     topTextContainer: {
-        width: '80%'
+        width: '100%'
     },
     topText: {
-        fontSize: 12,
-        color: '#767676',
+        fontSize: 14,
+        color: '#fff',
         textAlign: 'right'
     },
     titleContainer: {
-        backgroundColor: '#eeeeee',
-        padding: 5,
-        height: 75,
-        borderRadius: 10,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        padding: 10,
+        //height: 75,
+        //borderRadius: 10,
         justifyContent: 'space-between'
     },
     title: {
     },
     titleText: {
-        fontSize: 16,
+        fontSize: 18,
         textAlign: 'left',
-        color: CustomColors.primaryColor
+        color: '#fff'
     },
     countText: {
         color: '#acacac',
         fontSize: 15
-    }
+    },
+    imageBackgroundOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        justifyContent: 'flex-end'
+    },
 });
 
 export default CategoriesList2;
