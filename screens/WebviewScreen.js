@@ -15,6 +15,7 @@ const WebviewScreen = (props) => {
                     : <View></View>
             }
             <WebView
+            onMessage = {()=>{}}
                 onLoad={() => { setTimeout(() => { setIsLoading(false); }, 1000) }}
                 injectedJavaScript="
             jQuery('#wpadminbar').hide();
