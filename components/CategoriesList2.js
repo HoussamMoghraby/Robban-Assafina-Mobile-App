@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     topText: {
         fontSize: 14,
         color: '#fff',
-        textAlign: 'right'
+        textAlign: 'left'
     },
     titleContainer: {
         backgroundColor: 'rgba(0,0,0,0.6)',
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontSize: 18,
-        textAlign: 'left',
+        textAlign: 'right',
         color: '#fff'
     },
     countText: {
