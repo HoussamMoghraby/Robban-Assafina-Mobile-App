@@ -7,13 +7,13 @@ import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-ico
 import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
 import CustomColors from '../constants/CustomColors';
-import WebView from 'react-native-webview';
+import {WebView} from 'react-native-webview';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../components/CustomHeaderButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleFavorite } from '../store/actions/posts';
 import { decodeString } from '../helpers/apiUtils';
-import Video from 'react-native-video';
+//import Video from 'react-native-video';
 const IMAGE_HEIGHT = 250;
 let customHeaderComponent = (props) => {
     return (
@@ -140,14 +140,19 @@ const PostScreen = (props) => {
                                             // console.log(innerHTML)
                                             console.log("twitter", children.rawChildren[1].parent.innerHTML)
                                             const content = `<figure class="wp-block-embed-twitter aligncenter wp-block-embed is-type-rich is-provider-twitter">
-                                            <div class="wp-block-embed__wrapper">${children.rawChildren[1].parent.innerHTML}<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
-                                            </figure>`;
+                                            // <div class="wp-block-embed__wrapper">${children.rawChildren[1].parent.innerHTML}<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+                                            // </figure>`;
+                                            //const content = `<html><body><h1>1233</h1></body></html>`;
                                             return (
-                                                <ScrollView style={{ flex: 1, width: '100%', maxHeight: 550, backgroundColor: 'yellow' }}>
-                                                    <WebView onShouldStartLoadWithRequest={(event) => {
+                                                <ScrollView key={11} style={{ flex: 1, width: '100%', height: 550 }}>
+                                                    <WebView bounces={false} domStorageEnabled={true} startInLoadingState={true} onShouldStartLoadWithRequest={(event) => {
+                                                        console.log(event);
+                                                        if(event && event.url && event.mainDocumentURL!='about:blank'){
                                                         Linking.openURL(event.url);
                                                         return false;
-                                                    }} allowsLinkPreview={false} overScrollMode="always" scrollEnabled={true} scalesPageToFit={false} style={{ flex: 1, height: 550 }} source={{ html: content }} javaScriptEnabled={true}></WebView>
+                                                        }
+                                                        return true;
+                                                    }} allowsLinkPreview={false} scrollEnabled={true} scalesPageToFit={false} style={{ height: 550, marginTop:0 , width:Dimensions.get('window').width, backgroundColor:'red'}} source={{ html: content}} html={content} javaScriptEnabled={true}></WebView>
                                                 </ScrollView>
                                             )
                                         }
