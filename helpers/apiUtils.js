@@ -15,6 +15,7 @@ export const decodeString = (text) => {
         .replace(/&#038;/g, '&')
         .replace(/&#8216;/g, "'")
         .replace(/&#8211;/g, "-")
+        .replace(/&amp;/g, "&")
         ;
     return resolvedText;
 }

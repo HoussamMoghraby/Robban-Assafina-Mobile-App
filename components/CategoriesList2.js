@@ -10,6 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCategories } from '../store/actions/categories';
 import * as CategoriesActions from '../store/actions/categories';
+import { decodeString } from '../helpers/apiUtils';
 
 const CategoriesList2 = (props) => {
     //const categories = categories_data.filter(c => c.parent != 81 && c.parent != 202 && c.count > 0);
@@ -38,7 +39,7 @@ const CategoriesList2 = (props) => {
         const parentCategory = availableCategories.find(c => c.id == itemData.item.parent);
         return (
             <View style={styles.container} key={itemData.item.id}>
-                <TouchableComponent onPress={() => { props.navigation.push('CategoryPosts', { categoryId: itemData.item.id, categoryTitle: itemData.item.name }) }}>
+                <TouchableComponent onPress={() => { props.navigation.push('CategoryPosts', { categoryId: itemData.item.id, categoryTitle: decodeString(itemData.item.name.trim()) }) }}>
                     <View style={styles.cardContainer}>
                         <View style={styles.topContainer}>
                             <View style={styles.bubble}>
@@ -54,11 +55,11 @@ const CategoriesList2 = (props) => {
                         </View>
                         <View style={styles.titleContainer}>
                             <View style={styles.title}>
-                                <MyText style={styles.titleText} numberOfLines={2} bold={true}>{itemData.item.name.trim()}</MyText>
+                                <MyText style={styles.titleText} numberOfLines={3} bold={true}>{`${decodeString(itemData.item.name.trim())} ${itemData.item.description ? ' | ' + itemData.item.description : ''}`}</MyText>
                             </View>
-                            <View>
+                            {/* <View>
                                 <MyText numberOfLines={1} style={styles.countText}>{itemData.item.count}+ articles</MyText>
-                            </View>
+                            </View> */}
                         </View>
                     </View>
                 </TouchableComponent>

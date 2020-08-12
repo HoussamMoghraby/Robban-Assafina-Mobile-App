@@ -7,7 +7,7 @@ import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-ico
 import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
 import CustomColors from '../constants/CustomColors';
-import {WebView} from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../components/CustomHeaderButton';
 import { useSelector, useDispatch } from 'react-redux';
@@ -133,46 +133,25 @@ const PostScreen = (props) => {
                                 blockquote: {
                                     renderer: (htmlAttribs, node, parent, children, innerHTML) => {
                                         if (htmlAttribs.class && htmlAttribs.class == 'twitter-tweet') {
-                                            // console.log(htmlAttribs)
-                                            // console.log(node)
-                                            // console.log(parent)
-                                            // console.log(children)
-                                            // console.log(innerHTML)
-                                            console.log("twitter", children.rawChildren[1].parent.innerHTML)
+                                            console.log("twitter", children.rawChildren[1].parent.innerHTML);
                                             const content = `<figure class="wp-block-embed-twitter aligncenter wp-block-embed is-type-rich is-provider-twitter">
-                                            // <div class="wp-block-embed__wrapper">${children.rawChildren[1].parent.innerHTML}<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
-                                            // </figure>`;
-                                            //const content = `<html><body><h1>1233</h1></body></html>`;
+                                            <div class="wp-block-embed__wrapper">${children.rawChildren[1].parent.innerHTML}<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></figure>`;
                                             return (
                                                 <ScrollView key={11} style={{ flex: 1, width: '100%', height: 550 }}>
                                                     <WebView bounces={false} domStorageEnabled={true} startInLoadingState={true} onShouldStartLoadWithRequest={(event) => {
                                                         console.log(event);
-                                                        if(event && event.url && event.mainDocumentURL!='about:blank'){
-                                                        Linking.openURL(event.url);
-                                                        return false;
+                                                        if (event && event.url && event.mainDocumentURL != 'about:blank') {
+                                                            Linking.openURL(event.url);
+                                                            return false;
                                                         }
                                                         return true;
-                                                    }} allowsLinkPreview={false} scrollEnabled={true} scalesPageToFit={false} style={{ height: 550, marginTop:0 , width:Dimensions.get('window').width, backgroundColor:'red'}} source={{ html: content}} html={content} javaScriptEnabled={true}></WebView>
+                                                    }} allowsLinkPreview={false} scrollEnabled={true} scalesPageToFit={false} style={{ height: 550, marginTop: 0, width: Dimensions.get('window').width }} source={{ html: content }} html={content} javaScriptEnabled={true}></WebView>
                                                 </ScrollView>
                                             )
                                         }
                                         return node;
                                     }
                                 },
-                                // figure: (e, e1) => {
-                                //     console.log('Figure');
-                                //     console.log(e);
-                                //     //console.log(e1);
-                                //     // return (
-                                //     //     <View><Text>Figure</Text></View>
-                                //     // )
-                                // },
-                                // figure: (e) => {
-                                //     console.log(e);
-                                //     return (
-                                //         <WebView style={{ width: 400, height: 400, backgroundColor: 'red' }} javaScriptEnabled={true} source={{ uri: 'https://t.co/iOFzIbBxC3' }} />
-                                //     )
-                                // },
                                 iframe: (e) => {
                                     console.log('iframe');
                                     console.log(e);
