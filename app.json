@@ -16,18 +16,20 @@
       "backgroundColor": "#e0f2fe"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 10000
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.assafinaonline.robbanassafina"
+      "bundleIdentifier": "com.assafinaonline.robbanassafina",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "package": "com.assafinaonline.robbanassafina",
       "versionCode": 1,
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

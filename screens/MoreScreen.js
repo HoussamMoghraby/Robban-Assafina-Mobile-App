@@ -78,7 +78,7 @@ const MoreScreen = (props) => {
                         : <View></View>
                 }
                 <View style={styles.buttons}>
-                    <TouchableComponent onPress={() => { handleLinkClick('Contact Us', 'https://assafinaonline.com/contact-us/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('Contact Us', 'https://assafinaonline.com/contact-us-mobile/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Contact Us</MyText>
@@ -88,7 +88,7 @@ const MoreScreen = (props) => {
                             </View>
                         </View>
                     </TouchableComponent>
-                    <TouchableComponent onPress={() => { handleLinkClick('About Us', 'https://assafinaonline.com/about-us/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('About Us', 'https://assafinaonline.com/about-us-2/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>About Us</MyText>
@@ -98,7 +98,7 @@ const MoreScreen = (props) => {
                             </View>
                         </View>
                     </TouchableComponent>
-                    <TouchableComponent onPress={() => { handleLinkClick('Subscribe With Us', 'https://assafinaonline.com/subscription-form/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('Subscribe With Us', 'https://assafinaonline.com/subscription-form-mobile/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Subscribe With Us</MyText>
@@ -108,7 +108,7 @@ const MoreScreen = (props) => {
                             </View>
                         </View>
                     </TouchableComponent>
-                    <TouchableComponent onPress={() => { handleLinkClick('Join Our Newsletter', 'https://assafinaonline.com/join-our-newsletter/') }}>
+                    <TouchableComponent onPress={() => { handleLinkClick('Join Our Newsletter', 'https://assafinaonline.com/join-our-newsletter-mobile/') }}>
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Join Our Newsletter</MyText>
@@ -136,8 +136,14 @@ const MoreScreen = (props) => {
                 </View>
             </ScrollView>
             <View style={styles.appDev}>
-                <MyText style={{ fontSize: 10 }}>App Designed & Developed by</MyText>
-                <MyText bold={true} style={{ fontSize: 10 }}>RADIX S.A.R.L</MyText>
+                <View>
+                    <MyText style={{ fontSize: 10 }}>App Designed & Developed by</MyText>
+                </View>
+                <TouchableComponent onPress={() => { Linking.openURL('http://www.radixsarl.com'); }}>
+                    <View>
+                        <MyText bold={true} style={{ fontSize: 10 }}>RADIX S.A.R.L</MyText>
+                    </View>
+                </TouchableComponent>
             </View>
         </View >
     )

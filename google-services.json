@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "374899940153",
+    "firebase_url": "https://modified-return-700.firebaseio.com",
+    "project_id": "modified-return-700",
+    "storage_bucket": "modified-return-700.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374899940153:android:c1dc42c82417dc986166e8",
+        "android_client_info": {
+          "package_name": "com.assafinaonline.robbanassafina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374899940153-nha7ovlgk2n59alt0r0aatpaomv3fnhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhL_sF3fR2x73OOVSGClpY7RusJLMBRS0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374899940153-nha7ovlgk2n59alt0r0aatpaomv3fnhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

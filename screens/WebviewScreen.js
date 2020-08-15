@@ -17,17 +17,17 @@ const WebviewScreen = (props) => {
             <WebView
             onMessage = {()=>{}}
                 onLoad={() => { setTimeout(() => { setIsLoading(false); }, 1000) }}
-                injectedJavaScript="
-            jQuery('#wpadminbar').hide();
-            jQuery('header').hide();
-            jQuery('#sidebar-right').parent().hide();
-            jQuery('footer').hide();
-            jQuery('.breadcrumb').hide();
-            jQuery('.heateor_sss_sharing_container').remove();
-            jQuery('.back-to-top').remove();"
+            //     injectedJavaScript="
+            // jQuery('#wpadminbar').hide();
+            // jQuery('header').hide();
+            // jQuery('#sidebar-right').parent().hide();
+            // jQuery('footer').hide();
+            // jQuery('.breadcrumb').hide();
+            // jQuery('.heateor_sss_sharing_container').remove();
+            // jQuery('.back-to-top').remove();"
                 bounces={false}
                 //domStorageEnabled={true}
-                startInLoadingState={true}
+                startInLoadingState={false}
                 onShouldStartLoadWithRequest={(event) => {
                     //console.log(event);
                     // if (event && event.url && event.mainDocumentURL != 'about:blank') {
