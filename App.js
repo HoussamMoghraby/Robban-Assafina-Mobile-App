@@ -12,9 +12,11 @@ import categoriesReducer from './store/reducers/categories';
 import authReducer from './store/reducers/auth';
 import ReduxThunk from 'redux-thunk';
 import { isPlatformAndroid } from './helpers/Platform';
-import * as Notifications from 'expo-notifications';
+import * as Notifications_NEW from 'expo-notifications';
+import { Notifications } from 'expo';
+import AsyncStorage from '@react-native-community/async-storage';
 
-Notifications.setNotificationHandler({
+Notifications_NEW.setNotificationHandler({
   handleNotification: async () => {
     return {
       shouldPlaySound: true,
@@ -22,6 +24,21 @@ Notifications.setNotificationHandler({
     }
   }
 });
+
+// Notifications_NEW.addNotificationResponseReceivedListener(response => {
+//   debugger;
+//   console.log(response.notification.request.content.data);
+//   try {
+//     if (response.notification.request.content.data && response.notification.request.content.data.postId) {
+//       AsyncStorage.setItem('tapped', response.notification.request.content.data.postId.toString()).then(() => { });
+//     }
+//   }
+//   catch (e) {
+//     console.error(e);
+//   }
+// });
+
+
 
 I18nManager.allowRTL(false);
 enableScreens();
@@ -41,7 +58,6 @@ const fetchFonts = () => {
 };
 
 export default function App() {
-
   StatusBar.setBarStyle(isPlatformAndroid() ? 'light-content' : 'default');
   if (isPlatformAndroid())
     StatusBar.setBackgroundColor(CustomColors.accentColor);
@@ -49,6 +65,25 @@ export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [loadCustomSplash, setLoadCustomSplash] = useState(0);
   const [customSplashURL, setCustomSplashURL] = useState();
+
+  // useEffect(() => {
+  //   //Background notification handler
+  //   const backgroundSubscription = Notifications.addListener(response => {
+  //     debugger;
+  //     console.log(response.notification.request.content.data);
+  //     try {
+  //       if (response.notification.request.content.data && response.notification.request.content.data.postId) {
+  //         AsyncStorage.setItem('tapped', response.notification.request.content.data.postId.toString()).then(() => { });
+  //       }
+  //     }
+  //     catch (e) {
+  //       console.error(e);
+  //     }
+  //   });
+  //   return () => {
+  //     backgroundSubscription.remove();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const loadSplash = async () => {

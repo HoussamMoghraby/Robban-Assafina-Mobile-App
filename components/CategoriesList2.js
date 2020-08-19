@@ -68,9 +68,23 @@ const CategoriesList2 = (props) => {
                                     </View>
                                 </View>
                                 <View style={styles.titleContainer}>
-                                    <View style={styles.title}>
-                                        <MyText style={styles.titleText} numberOfLines={3} bold={true}>{`${decodeString(itemData.item.name.trim())} ${itemData.item.description ? ' | ' + itemData.item.description : ''}`}</MyText>
+                                    <View style={{ ...styles.titleLeft, flex: (decodeString(itemData.item.name.trim()).length > itemData.item.description.length) ? 0.6 : 0.4 }}>
+                                        <MyText style={{ ...styles.titleText, textAlign: 'left' }} numberOfLines={3} bold={true}>{decodeString(itemData.item.name.trim())}</MyText>
+                                        {/* {
+                                            itemData.item.description ? <MyText style={{ ...styles.titleText, textAlign: 'right' }} numberOfLines={3} bold={true}> {`${itemData.item.description}`}</MyText> : <View></View>
+                                        } */}
+
                                     </View>
+                                    {/* <View>{
+                                        itemData.item.description ? <MyText style={{ color: '#fff' }}> - </MyText> : <View></View>
+                                    }</View> */}
+                                    {
+                                        itemData.item.description ?
+                                            <View style={{ ...styles.titleRight, flex: (decodeString(itemData.item.name.trim()).length > itemData.item.description.length) ? 0.4 : 0.6 }}>
+                                                <MyText style={{ ...styles.titleText, textAlign: 'right' }} numberOfLines={3} bold={true}>{itemData.item.description}</MyText>
+                                            </View> :
+                                            <View></View>
+                                    }
                                 </View>
                             </View>
                         </View>
@@ -166,14 +180,28 @@ const styles = StyleSheet.create({
         padding: 10,
         //height: 75,
         //borderRadius: 10,
-        justifyContent: 'space-between'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flexWrap: 'nowrap'
+        //maxWidth: '100%',
     },
-    title: {
+    titleLeft: {
+        //flex: 0.6,
+        //backgroundColor:'red',
+        // flexDirection: 'row',
+        // justifyContent: 'space-between',
+        // flexWrap: 'wrap',
+        // alignItems:'center'
+    },
+    titleRight: {
+        //flex: 0.4,
+        //backgroundColor:'yellow'
     },
     titleText: {
         fontSize: 18,
         textAlign: 'right',
-        color: '#fff'
+        color: '#fff',
+        //marginHorizontal: 15
     },
     countText: {
         color: '#acacac',

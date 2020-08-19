@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert } from 'react-native';
 import PostsList from '../components/PostsList';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomColors from '../constants/CustomColors';
@@ -83,6 +83,7 @@ const HomeScreen = (props) => {
                             if (response) {
                                 dispatch(AuthActions.registerPushToken(response.data))
                                     .then(c => {
+                                        //Alert.alert(response.data);
                                         console.log(c);
                                     })
                                     .catch(error => { console.log(error); })
@@ -113,22 +114,51 @@ const HomeScreen = (props) => {
     }, [dispatch]);
 
 
+    //const [tappedNotification, setTappedNotification] = useState();
     useEffect(() => {
         //Background notification handler
-        const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
-        });
+        // const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+        //     console.log(response.notification.request.content.data);
+        //     debugger;
+        //     // try {
+        //     if (response.notification.request.content.data && response.notification.request.content.data.postId) {
+        //         //Alert.alert(response.notification.request.content.data.postId.toString());
+        //         //props.navigation.push('Search');
+        //         setTappedNotification(response.notification.request.content.data.postId);
+        //         AsyncStorage.setItem('tapped', response.notification.request.content.data.postId.toString()).then(() => { });
+        //     }
+        //     // }
+        //     // catch (e) {
+        //     // console.error(e);
+        //     // }
+        //     console.log(response);
+        // });
 
         //Foreground notification handler
         const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+            //debugger;
+            if (notification.request.content.data && notification.request.content.data.postId) {
+                //Alert.alert(notification.request.content.data.postId.toString());
+            }
             console.log(notification);
         });
 
         return () => {
-            backgroundSubscription.remove();
+            //backgroundSubscription.remove();
             foregroundSubscription.remove();
         }
     }, []);
+
+    // useEffect(() => {
+    //     AsyncStorage.getItem('tapped').then((tt) => {
+    //         console.log('Stored tapped: ' + tt);
+    //         //Alert.alert('Stored tapped: ' + tt);
+    //     });
+    //     console.log('tapped notification: ' + tappedNotification);
+    //     if (tappedNotification) {
+    //         //props.navigation.push('Search');
+    //     }
+    // }, [tappedNotification]);
 
 
     const [scrollToTop, setScrollToTop] = useState([]);
