@@ -30,6 +30,8 @@ const HomeScreen = (props) => {
     //const pushToken = useSelector(state => state.auth.pushToken);
     const dispatch = useDispatch();
     const sponsorsHTML = useSelector(state => state.posts.sponsorsHtmlString);
+    const notificationPost = useSelector(state => state.posts.notificationPost);
+    //var notificationIsLoading = useSelector(state => state.posts.notificationIsLoading);
     const [sponsorsList, setSponsorsList] = useState([]);
 
     useEffect(() => {
@@ -116,49 +118,74 @@ const HomeScreen = (props) => {
 
     //const [tappedNotification, setTappedNotification] = useState();
     useEffect(() => {
-        //Background notification handler
-        // const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-        //     console.log(response.notification.request.content.data);
-        //     debugger;
-        //     // try {
-        //     if (response.notification.request.content.data && response.notification.request.content.data.postId) {
-        //         //Alert.alert(response.notification.request.content.data.postId.toString());
-        //         //props.navigation.push('Search');
-        //         setTappedNotification(response.notification.request.content.data.postId);
-        //         AsyncStorage.setItem('tapped', response.notification.request.content.data.postId.toString()).then(() => { });
-        //     }
-        //     // }
-        //     // catch (e) {
-        //     // console.error(e);
-        //     // }
-        //     console.log(response);
-        // });
-
+        const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response.notification.request.content.data);
+            try {
+                if (response.notification.request.content.data && response.notification.request.content.data.postId) {
+                    //AsyncStorage.setItem('tappedNotificationPostId', response.notification.request.content.data.postId.toString()).then(() => { });
+                    //Alert.alert(`tappedNotificationPostId: ${response.notification.request.content.data.postId}`);
+                    //props.navigation.push('Search');
+                    //props.navigation.push(routeName, { id: id, title: title, mediaUrl: mediaUrl, post: post });
+                    //notificationIsLoading = true;
+                    dispatch(PostsActions.setNotificationPostLoader(true));
+                    dispatch(PostsActions.getPostById(response.notification.request.content.data.postId));
+                }
+            }
+            catch (e) {
+                console.error(e);
+            }
+        });
         //Foreground notification handler
         const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
             //debugger;
             if (notification.request.content.data && notification.request.content.data.postId) {
                 //Alert.alert(notification.request.content.data.postId.toString());
             }
-            console.log(notification);
+            console.log('foregroundSubscription: ' + notification);
         });
 
         return () => {
-            //backgroundSubscription.remove();
+            backgroundSubscription.remove();
             foregroundSubscription.remove();
         }
     }, []);
 
+
+    const getPostMediaUrl = useCallback((post) => {
+        if (post && post['_embedded']['wp:featuredmedia'] && post['_embedded']['wp:featuredmedia'].length > 0) {
+            var mediaUrl = post['_embedded']['wp:featuredmedia'][0].source_url;
+            if (mediaUrl)
+                return { uri: mediaUrl };
+            return require(`../assets/placeholder.png`);
+        }
+        return require(`../assets/placeholder.png`);
+    }, [notificationPost]);
+
+    useEffect(() => {
+        debugger;
+        if (notificationPost && !notificationPost.opened) {
+            console.log('navigate to post:' + notificationPost.id);
+            notificationPost.opened = true;
+            props.navigation.push('Post', { id: notificationPost.id, title: notificationPost.title, mediaUrl: getPostMediaUrl(notificationPost), post: notificationPost });
+        }
+    }, [notificationPost]);
+
     // useEffect(() => {
-    //     AsyncStorage.getItem('tapped').then((tt) => {
-    //         console.log('Stored tapped: ' + tt);
-    //         //Alert.alert('Stored tapped: ' + tt);
-    //     });
-    //     console.log('tapped notification: ' + tappedNotification);
-    //     if (tappedNotification) {
-    //         //props.navigation.push('Search');
-    //     }
-    // }, [tappedNotification]);
+    //     AsyncStorage.getItem('tappedNotificationPostId').then((tnpId) => {
+    //         if (tnpId && tnpId != '') {
+    //             console.log('tappedNotificationPostId:' + tnpId);
+    //             Alert.alert(tnpId);
+    //         }
+    //     }).then(() => {
+    //         AsyncStorage.setItem('tappedNotificationPostId', '').then(() => {
+    //             console.log('Cleared tappedNotificationPostId');
+    //         });
+    //     }).catch((error) => { console.error(error); });
+    //     //console.log('tapped notification: ' + tappedNotification);
+    //     // if (tappedNotification) {
+    //     //     //props.navigation.push('Search');
+    //     // }
+    // }, []);
 
 
     const [scrollToTop, setScrollToTop] = useState([]);

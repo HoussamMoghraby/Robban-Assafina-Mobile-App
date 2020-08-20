@@ -6,7 +6,7 @@ import AssafinaNavigator from './navigation/AssafinaNavigator';
 import { enableScreens } from 'react-native-screens';
 import CustomColors from './constants/CustomColors';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import postsReducer from './store/reducers/posts';
 import categoriesReducer from './store/reducers/categories';
 import authReducer from './store/reducers/auth';
@@ -15,6 +15,7 @@ import { isPlatformAndroid } from './helpers/Platform';
 import * as Notifications_NEW from 'expo-notifications';
 import { Notifications } from 'expo';
 import AsyncStorage from '@react-native-community/async-storage';
+import RootScreen from './screens/RootScreen';
 
 Notifications_NEW.setNotificationHandler({
   handleNotification: async () => {
@@ -25,18 +26,9 @@ Notifications_NEW.setNotificationHandler({
   }
 });
 
-// Notifications_NEW.addNotificationResponseReceivedListener(response => {
-//   debugger;
-//   console.log(response.notification.request.content.data);
-//   try {
-//     if (response.notification.request.content.data && response.notification.request.content.data.postId) {
-//       AsyncStorage.setItem('tapped', response.notification.request.content.data.postId.toString()).then(() => { });
-//     }
-//   }
-//   catch (e) {
-//     console.error(e);
-//   }
-// });
+Notifications_NEW.addNotificationResponseReceivedListener(response => {
+  debugger;
+})
 
 
 
@@ -57,7 +49,11 @@ const fetchFonts = () => {
   });
 };
 
-export default function App() {
+export default function App(props) {
+  console.log(props);
+  if (props.exp.notification || props.exp.notifications) {
+    debugger;
+  }
   StatusBar.setBarStyle(isPlatformAndroid() ? 'light-content' : 'default');
   if (isPlatformAndroid())
     StatusBar.setBackgroundColor(CustomColors.accentColor);
@@ -68,12 +64,12 @@ export default function App() {
 
   // useEffect(() => {
   //   //Background notification handler
-  //   const backgroundSubscription = Notifications.addListener(response => {
+  //   const backgroundSubscription = Notifications_NEW.addNotificationResponseReceivedListener(response => {
   //     debugger;
   //     console.log(response.notification.request.content.data);
   //     try {
   //       if (response.notification.request.content.data && response.notification.request.content.data.postId) {
-  //         AsyncStorage.setItem('tapped', response.notification.request.content.data.postId.toString()).then(() => { });
+  //         AsyncStorage.setItem('tappedNotificationPostId', response.notification.request.content.data.postId.toString()).then(() => { });
   //       }
   //     }
   //     catch (e) {
@@ -138,7 +134,8 @@ export default function App() {
     return (
       <Provider store={store}>
         <SafeAreaView style={styles.appContainer}>
-          <AssafinaNavigator></AssafinaNavigator>
+          {/* <AssafinaNavigator></AssafinaNavigator> */}
+          <RootScreen></RootScreen>
         </SafeAreaView>
       </Provider>
     );

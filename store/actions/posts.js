@@ -9,6 +9,8 @@ export const FETCH_ARCHIVES = 'FETCH_ARCHIVES';
 export const FETCH_FAVORITES_NEW = 'FETCH_FAVORITES_NEW';
 export const TOGGLE_FAVORITE_NEW = 'TOGGLE_FAVORITE_NEW';
 export const FETCH_SPONSORS_HTML = 'FETCH_SPONSORS_HTML';
+export const ADD_NOTIFICATION_POST = 'ADD_NOTIFICATION_POST';
+export const SET_NOTIFICATION_POST_LOADER = 'SET_NOTIFICATION_POST_LOADER';
 // export const toggleFavorite = (postId) => {
 //     return async dispatch => {
 //         try {
@@ -64,6 +66,10 @@ export const fetchFavorites = () => {
 
 export const setFilters = (keyword) => {
     return { type: SET_FILTERS, keyword: keyword }
+}
+
+export const setNotificationPostLoader = (value) => {
+    return { type: SET_NOTIFICATION_POST_LOADER, value: value }
 }
 
 const DEFAULT_LIMIT = 10;
@@ -134,6 +140,25 @@ export const searchPosts = (keyword, start = 1, limit = DEFAULT_LIMIT) => {
             }
             //throw ('123');
             dispatch({ type: SEARCH_POSTS, posts: resData, page: start, stopPagination: stopPagination });
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export const getPostById = (postId) => {
+    return async dispatch => {
+        try {
+            //debugger;
+            //any async code
+            console.log('getPostById: ' + postId);
+            const response = await fetch(`${apiUrl}posts/${postId}?_embed&status=publish`);
+            var resData = await response.json();
+            console.log('getPostById response:');
+            //await getPostsMedias(resData);
+            console.log(resData);
+            //throw ('123');
+            dispatch({ type: ADD_NOTIFICATION_POST, notificationPost: resData });
         } catch (error) {
             throw error;
         }

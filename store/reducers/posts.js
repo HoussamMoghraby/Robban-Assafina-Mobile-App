@@ -1,5 +1,5 @@
 //import { posts_data } from '../../data/posts';
-import { TOGGLE_FAVORITE, FETCH_ARCHIVES, FETCH_POSTS, SEARCH_POSTS, UPDATE_POSTS_MEDIAS, TOGGLE_FAVORITE_NEW, FETCH_FAVORITES_NEW, FETCH_SPONSORS_HTML } from '../actions/posts';
+import { TOGGLE_FAVORITE, FETCH_ARCHIVES, FETCH_POSTS, SEARCH_POSTS, UPDATE_POSTS_MEDIAS, TOGGLE_FAVORITE_NEW, FETCH_FAVORITES_NEW, FETCH_SPONSORS_HTML, ADD_NOTIFICATION_POST, SET_NOTIFICATION_POST_LOADER } from '../actions/posts';
 export const initialState = {
     posts: [],
     filteredPosts: [],
@@ -11,7 +11,9 @@ export const initialState = {
     stopCategoryPagination: false,
     archivePosts: new Map(),
     stopArchivesPagination: false,
-    sponsorsHtmlString: null
+    sponsorsHtmlString: null,
+    notificationPost: undefined,
+    notificationIsLoading: false
 }
 
 const postsReducer = (state = initialState, action) => {
@@ -22,7 +24,7 @@ const postsReducer = (state = initialState, action) => {
         case TOGGLE_FAVORITE_NEW:
             return { ...state, favoritePosts: action.favs }
         case TOGGLE_FAVORITE:
-            const allPosts = [...state.posts, ...state.filteredPosts, ...state.categoryPosts];
+            const allPosts = [...state.posts, ...state.filteredPosts, ...state.categoryPosts, ...state.notificationPost];
             const existingIndex = state.favoritePosts.indexOf(allPosts.find(p => p.id === action.postId));
             if (existingIndex >= 0) {
                 const updateFavPosts = [...state.favoritePosts];
@@ -64,6 +66,12 @@ const postsReducer = (state = initialState, action) => {
             //debugger;
             state.archivePosts.set(action.categoryId, archives);
             return { ...state, archivePosts: state.archivePosts, stopArchivesPagination: action.stopPagination }
+        case ADD_NOTIFICATION_POST:
+            debugger;
+            const collectedPost = action.notificationPost;
+            return { ...state, notificationPost: { ...collectedPost }, notificationIsLoading: false };
+        case SET_NOTIFICATION_POST_LOADER:
+            return { ...state, notificationPost: { ...state.notificationPost }, notificationIsLoading: { ...action.value } };
         default:
             return state;
     }
