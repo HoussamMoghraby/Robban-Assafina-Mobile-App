@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert, Vibration } from 'react-native';
 import PostsList from '../components/PostsList';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomColors from '../constants/CustomColors';
@@ -7,7 +7,8 @@ import CustomHeaderButton from '../components/CustomHeaderButton';
 import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
 import * as Permissions from 'expo-permissions';
-import * as Notifications from 'expo-notifications';
+import * as Notifications_NEW from 'expo-notifications';
+import { Notifications } from 'expo';
 import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -80,7 +81,7 @@ const HomeScreen = (props) => {
             return AsyncStorage.getItem('pushToken').then(savedToken => {
                 console.log('saved token :' + savedToken);
                 if (!savedToken) {
-                    Notifications.getExpoPushTokenAsync()
+                    Notifications_NEW.getExpoPushTokenAsync()
                         .then(response => {
                             if (response) {
                                 dispatch(AuthActions.registerPushToken(response.data))
@@ -118,7 +119,7 @@ const HomeScreen = (props) => {
 
     //const [tappedNotification, setTappedNotification] = useState();
     useEffect(() => {
-        const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+        const backgroundSubscription = Notifications_NEW.addNotificationResponseReceivedListener(response => {
             console.log(response.notification.request.content.data);
             try {
                 if (response.notification.request.content.data && response.notification.request.content.data.postId) {
@@ -136,7 +137,7 @@ const HomeScreen = (props) => {
             }
         });
         //Foreground notification handler
-        const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+        const foregroundSubscription = Notifications_NEW.addNotificationReceivedListener(notification => {
             //debugger;
             if (notification.request.content.data && notification.request.content.data.postId) {
                 //Alert.alert(notification.request.content.data.postId.toString());
@@ -149,6 +150,28 @@ const HomeScreen = (props) => {
             foregroundSubscription.remove();
         }
     }, []);
+
+    const [notification, setNotification] = useState();
+    const handleNotification = useCallback((notification) => {
+        setNotification(notification);
+        console.log(notification.origin);
+        debugger;
+        if (notification.origin == 'selected') {
+            dispatch(PostsActions.setNotificationPostLoader(true));
+            dispatch(PostsActions.getPostById(notification.data.postId));
+        }
+        // if (notification.origin == 'received') {
+        //     Vibration.vibrate();
+        // }
+    }, [dispatch]);
+
+    useEffect(() => {
+        console.log('proppp');
+        var subs = Notifications.addListener(handleNotification);
+        return () => {
+            subs.remove();
+        }
+    }, [dispatch])
 
 
     const getPostMediaUrl = useCallback((post) => {

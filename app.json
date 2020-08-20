@@ -28,8 +28,14 @@
     "android": {
       "package": "com.assafinaonline.robbanassafina",
       "versionCode": 1,
-      "useNextNotificationsApi": true,
+      "useNextNotificationsApi": false,
       "googleServicesFile": "./google-services.json"
+    },
+    "notification": {
+      "icon": "./assets/image.png",
+      "color": "#e0f2fe",
+      "androidMode": "default",
+      "androidCollapsedTitle": "n/a"
     }
   }
 }

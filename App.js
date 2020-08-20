@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, NativeModules, StatusBar, ImageBackground, Dimensions, Alert, I18nManager } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, NativeModules, StatusBar, ImageBackground, Dimensions, Alert, I18nManager, Vibration } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import AssafinaNavigator from './navigation/AssafinaNavigator';
@@ -16,6 +16,7 @@ import * as Notifications_NEW from 'expo-notifications';
 import { Notifications } from 'expo';
 import AsyncStorage from '@react-native-community/async-storage';
 import RootScreen from './screens/RootScreen';
+
 
 Notifications_NEW.setNotificationHandler({
   handleNotification: async () => {
@@ -54,6 +55,7 @@ export default function App(props) {
   if (props.exp.notification || props.exp.notifications) {
     debugger;
   }
+
   StatusBar.setBarStyle(isPlatformAndroid() ? 'light-content' : 'default');
   if (isPlatformAndroid())
     StatusBar.setBackgroundColor(CustomColors.accentColor);
@@ -81,6 +83,17 @@ export default function App(props) {
   //   }
   // }, []);
 
+  useEffect(() => {
+    const subs = Notifications.addListener((notification) => {
+      if (notification.origin == 'received') {
+        Vibration.vibrate();
+      }
+    });
+    return () => {
+      subs.remove();
+    }
+  });
+  
   useEffect(() => {
     const loadSplash = async () => {
       console.log('getting custom splash');
