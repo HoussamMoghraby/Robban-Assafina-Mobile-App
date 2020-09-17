@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert, Dimensions } from 'react-native';
 import PostsList from '../components/PostsList';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomColors from '../constants/CustomColors';
@@ -79,7 +79,7 @@ const HomeScreen = (props) => {
             //AsyncStorage.setItem('pushToken', '').then(ss => { });
             return AsyncStorage.getItem('pushToken').then(savedToken => {
                 console.log('saved token :' + savedToken);
-                if (!savedToken) {
+                if (!savedToken || (savedToken && !savedToken.startsWith('Expo'))) {
                     Notifications.getExpoPushTokenAsync()
                         .then(response => {
                             if (response) {
@@ -206,9 +206,9 @@ const HomeScreen = (props) => {
                         <View style={styles.sponsorsContainer}>
                             {
                                 sponsorsList.map(sponsor => (
-                                    <View style={{ ...styles.sponsorWrapper, ...{ maxWidth: `${(100 / sponsorsList.length).toString()}%` } }} key={sponsor.imageUrl}>
+                                    <View style={{ ...styles.sponsorWrapper, ...{ maxWidth: `${(100/* / sponsorsList.length*/).toString()}%` } }} key={sponsor.imageUrl}>
                                         <TouchableComponent onPress={() => { Linking.openURL(sponsor.link) }}>
-                                            <ImageBackground style={styles.sponsorsImage} source={{
+                                            <ImageBackground style={{ ...styles.sponsorsImage, ...{ height: SPONSORS_IMAGE_HEIGHT / 1 } }} source={{
                                                 uri: sponsor.imageUrl
                                             }} resizeMode="contain"></ImageBackground>
                                         </TouchableComponent>
@@ -253,12 +253,13 @@ const styles = StyleSheet.create({
         flex: 1
     },
     sponsorsContainer: {
-        flexDirection: 'row',
+        //flexDirection: 'row',
         justifyContent: 'flex-start',
         //elevation: 2,
         borderTopColor: '#ccc',
         borderTopWidth: 1,
-        alignItems: 'flex-start',
+        //alignItems: 'flex-start',
+        alignItems: 'center',
         width: '100%'
     },
     sponsorWrapper: {
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
     },
     sponsorsImage: {
         width: '100%',
-        height: SPONSORS_IMAGE_HEIGHT,
+        //maxHeight: SPONSORS_IMAGE_HEIGHT,
         borderColor: '#eee',
         borderRightWidth: 1,
         borderLeftWidth: 1

@@ -30,6 +30,9 @@
       "versionCode": 1,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json"
+    },
+    "notification": {
+      "icon": "./assets/notification_icon.png"
     }
   }
 }
