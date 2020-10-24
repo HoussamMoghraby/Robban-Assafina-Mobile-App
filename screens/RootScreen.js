@@ -4,6 +4,13 @@ import AssafinaNavigator from '../navigation/AssafinaNavigator';
 import { useSelector } from 'react-redux';
 import CustomColors from '../constants/CustomColors';
 import MyText from '../components/MyText';
+import * as Notifications_NEW from 'expo-notifications';
+
+// Notifications_NEW.addNotificationResponseReceivedListener(response => {
+//     console.log('APP: notification received');
+//     console.log(response);
+//     // Alert.alert('Notification clicked');
+//   })
 
 const RootScreen = (props) => {
     const notificationIsLoading = useSelector(state => state.posts.notificationIsLoading)

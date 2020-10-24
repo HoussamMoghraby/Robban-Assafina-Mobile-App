@@ -46,10 +46,12 @@ const HomeScreen = (props) => {
         const setTopSponsorsList = () => {
             console.log('Setting Top Sponsors');
             var doc = new DomParser().parseFromString(sponsorsHTML, 'text/html');
-            var topSponsorsDOM = doc.getElementById('top-banner-wrapper').getElementsByTagName('a');
+            var topSponsorsDOM = doc.getElementById('top-banner-wrapper-mobile')?.getElementsByTagName('a');
             var imagesList = [];
-            imagesList = getSponsorsImages(topSponsorsDOM, 'top');
-            setSponsorsList(imagesList);
+            if (topSponsorsDOM) {
+                imagesList = getSponsorsImages(topSponsorsDOM, 'top');
+                setSponsorsList(imagesList);
+            }
         }
         if (sponsorsHTML)
             setTopSponsorsList();
@@ -119,14 +121,17 @@ const HomeScreen = (props) => {
     //const [tappedNotification, setTappedNotification] = useState();
     useEffect(() => {
         const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log('HOME: notification received');
             console.log(response.notification.request.content.data);
             try {
-                if (response.notification.request.content.data && response.notification.request.content.data.postId) {
+                if (response.notification.request.content.data && response.notification.request.content.data.postId && response.notification.request.content.data.postId != 1) {
                     //AsyncStorage.setItem('tappedNotificationPostId', response.notification.request.content.data.postId.toString()).then(() => { });
                     //Alert.alert(`tappedNotificationPostId: ${response.notification.request.content.data.postId}`);
                     //props.navigation.push('Search');
                     //props.navigation.push(routeName, { id: id, title: title, mediaUrl: mediaUrl, post: post });
                     //notificationIsLoading = true;
+
+                    //disabled opening notification post
                     dispatch(PostsActions.setNotificationPostLoader(true));
                     dispatch(PostsActions.getPostById(response.notification.request.content.data.postId));
                 }

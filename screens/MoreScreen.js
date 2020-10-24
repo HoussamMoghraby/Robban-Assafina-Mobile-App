@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions, Linking, Alert } from 'react-native';
 import MyText from '../components/MyText';
 import CustomColors from '../constants/CustomColors';
@@ -7,10 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { isPlatformAndroid } from '../helpers/Platform';
 import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 //const isLoggedIn = true;
 
 const BUTTON_ICON_SIZE = 19;
 const MoreScreen = (props) => {
+    const [pushToken, setPushToken] = useState();
     const userToken = useSelector(state => state.auth.token);
     const userDisplayName = useSelector(state => state.auth.displayName);
 
@@ -57,6 +59,19 @@ const MoreScreen = (props) => {
             }
         }
         getUserToken();
+    }, [dispatch]);
+
+    useEffect(() => {
+        const getPushToken = async () => {
+            try {
+                let token = await AsyncStorage.getItem('pushToken');
+                setPushToken(token);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        getPushToken();
     }, [dispatch]);
 
     // if (isLoggedIn) {
@@ -112,6 +127,16 @@ const MoreScreen = (props) => {
                         <View style={styles.button}>
                             <View>
                                 <MyText style={styles.buttonText} bold={false}>Join Our Newsletter</MyText>
+                            </View>
+                            <View>
+                                <Ionicons style={styles.buttonIcon} size={BUTTON_ICON_SIZE} color={CustomColors.primaryColor} name="ios-arrow-forward"></Ionicons>
+                            </View>
+                        </View>
+                    </TouchableComponent>
+                    <TouchableComponent onPress={() => { Alert.alert('Facing issues with the app?', `Take a screenshot of this alert and send it to us by email so we can investigate it further.\n\nUsername: ${userDisplayName ? userDisplayName : 'NONE'}\nNotification Token: ${pushToken}\n`) }}>
+                        <View style={styles.button}>
+                            <View>
+                                <MyText style={styles.buttonText} bold={false}>Support</MyText>
                             </View>
                             <View>
                                 <Ionicons style={styles.buttonIcon} size={BUTTON_ICON_SIZE} color={CustomColors.primaryColor} name="ios-arrow-forward"></Ionicons>

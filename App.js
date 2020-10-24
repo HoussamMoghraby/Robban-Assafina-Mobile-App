@@ -21,14 +21,11 @@ Notifications_NEW.setNotificationHandler({
   handleNotification: async () => {
     return {
       shouldPlaySound: true,
-      shouldShowAlert: true
+      shouldShowAlert: true,
+      shouldSetBadge: true,
     }
   }
 });
-
-Notifications_NEW.addNotificationResponseReceivedListener(response => {
-  debugger;
-})
 
 
 
@@ -49,6 +46,12 @@ const fetchFonts = () => {
   });
 };
 
+Notifications_NEW.addNotificationResponseReceivedListener(response => {
+  console.log('APP: notification received');
+  console.log(response);
+  // Alert.alert('Notification clicked');
+})
+
 export default function App(props) {
   console.log(props);
   if (props.exp.notification || props.exp.notifications) {
@@ -62,7 +65,12 @@ export default function App(props) {
   const [loadCustomSplash, setLoadCustomSplash] = useState(0);
   const [customSplashURL, setCustomSplashURL] = useState();
 
-  // useEffect(() => {
+   useEffect(() => {
+    // Notifications_NEW.addNotificationResponseReceivedListener(response => {
+    //   console.log('APP: notification received');
+    //   console.log(response);
+    //   props.new_noti = response;
+    // })
   //   //Background notification handler
   //   const backgroundSubscription = Notifications_NEW.addNotificationResponseReceivedListener(response => {
   //     debugger;
@@ -79,7 +87,7 @@ export default function App(props) {
   //   return () => {
   //     backgroundSubscription.remove();
   //   }
-  // }, []);
+   }, []);
 
   useEffect(() => {
     const loadSplash = async () => {

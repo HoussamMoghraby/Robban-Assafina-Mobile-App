@@ -31,6 +31,7 @@ const getPostMediaUrl = (post) => {
 
 const ArchivesScreen = (props) => {
     const userToken = useSelector(state => state.auth.token);
+    
     const [tokenFetched, setTokenFetched] = useState(false);
     //const [isUserLoggedIn, setIsUserLoggedIn] = useState(userToken ? true : false);
     debugger;
@@ -61,6 +62,7 @@ const ArchivesScreen = (props) => {
         }
         getUserToken();
     }, [dispatch]);
+
 
     useEffect(() => {
         console.log(`userToken: ${userToken}`);

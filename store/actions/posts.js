@@ -234,7 +234,7 @@ export const fetchSponsorsHTML = () => {
         //async code
         try {
             console.log('fetching sponsors');
-            var response = await fetch('https://assafinaonline.com/about-us/');
+            var response = await fetch('https://assafinaonline.com/do-not-delete-used-by-mobile-app/');
             var htmlContent = await response.text();
             //var htmlContent = '';
             dispatch({ type: FETCH_SPONSORS_HTML, sponsorsHTML: htmlContent });

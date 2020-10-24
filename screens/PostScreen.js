@@ -197,7 +197,7 @@ const PostScreen = (props) => {
                             debug={false}
                             onLinkPress={(evt, href) => { Linking.openURL(href); }}
                             html={post.content.rendered}
-                            imagesMaxWidth={Dimensions.get('window').width} />
+                            imagesMaxWidth={Dimensions.get('window').width - 20} />
                         {/*<WebView
                             // injectedJavaScript={`const meta = document.createElement('meta'); meta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta); `}
                             injectedJavaScript={`document.getElementsByTagName('html')[0].style.userSelect='none'`}
