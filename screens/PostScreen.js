@@ -182,7 +182,7 @@ const PostScreen = (props) => {
                                 var cc;
                                 if (name === 'figure') {
                                     cc = node;
-                                    debugger;
+                                    //debugger;
                                     //console.log(cc);
                                     //return children.splice(0,1);
                                 }

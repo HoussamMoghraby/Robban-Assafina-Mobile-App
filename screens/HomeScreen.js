@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Image, Linking, Alert, Dimensions, Vibration } from 'react-native';
 import PostsList from '../components/PostsList';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomColors from '../constants/CustomColors';
@@ -8,6 +8,7 @@ import { isPlatformAndroid } from '../helpers/Platform';
 import TouchableComponent from '../components/TouchableComponent';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
+import { Notifications as LegacyNotifications } from 'expo';
 import { useSelector, useDispatch } from 'react-redux';
 import * as AuthActions from '../store/actions/auth';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -120,40 +121,80 @@ const HomeScreen = (props) => {
 
     //const [tappedNotification, setTappedNotification] = useState();
     useEffect(() => {
-        const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-            console.log('HOME: notification received');
-            console.log(response.notification.request.content.data);
-            try {
-                if (response.notification.request.content.data && response.notification.request.content.data.postId && response.notification.request.content.data.postId != 1) {
-                    //AsyncStorage.setItem('tappedNotificationPostId', response.notification.request.content.data.postId.toString()).then(() => { });
-                    //Alert.alert(`tappedNotificationPostId: ${response.notification.request.content.data.postId}`);
-                    //props.navigation.push('Search');
-                    //props.navigation.push(routeName, { id: id, title: title, mediaUrl: mediaUrl, post: post });
-                    //notificationIsLoading = true;
+        // AsyncStorage.getItem('notificationClicked').then(response => {
+        //     let ress = JSON.parse(response);
+        //     debugger;
+        //     if (ress.notification.request.content.data && ress.notification.request.content.data.postId && ress.notification.request.content.data.postId != 1) {
+        //         dispatch(PostsActions.setNotificationPostLoader(true));
+        //         dispatch(PostsActions.getPostById(ress.notification.request.content.data.postId));
+        //     }
+        // }).then(() => {
+        //     AsyncStorage.removeItem('notificationClicked').then(() => { }).catch(() => { });
+        // });
 
-                    //disabled opening notification post
+        //handle background notification selection
+        AsyncStorage.getItem('notificationPost').then((notif) => {
+            if (notif) {
+                console.log(notif);
+                debugger;
+                const notificationMessage = JSON.parse(notif);
+                if (notificationMessage.postId) {
                     dispatch(PostsActions.setNotificationPostLoader(true));
-                    dispatch(PostsActions.getPostById(response.notification.request.content.data.postId));
+                    dispatch(PostsActions.getPostById(notificationMessage.postId));
                 }
             }
-            catch (e) {
-                console.error(e);
+        }).then(() => {
+            AsyncStorage.setItem('notificationPost', '').then(() => { }).catch((e) => { console.warn(e); });
+        })
+            .catch((e) => { console.warn(e); })
+
+        const notifListener = LegacyNotifications.addListener((notification) => {
+            console.log('HOME: old notification received');
+            console.log(notification);
+            // if (notification && notification.origin && notification.origin == "received")
+            //     Vibration.vibrate();
+            if (notification && notification.origin && notification.origin == "selected") {
+                debugger;
+                dispatch(PostsActions.setNotificationPostLoader(true));
+                dispatch(PostsActions.getPostById(notification.data.postId));
             }
+            //console.log('Old notification receivedd');
         });
+        // const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+        //     console.log('HOME: notification received');
+        //     console.log(response.notification.request.content.data);
+        //     try {
+        //         if (response.notification.request.content.data && response.notification.request.content.data.postId && response.notification.request.content.data.postId != 1) {
+        //             //             //AsyncStorage.setItem('tappedNotificationPostId', response.notification.request.content.data.postId.toString()).then(() => { });
+        //             //             //Alert.alert(`tappedNotificationPostId: ${response.notification.request.content.data.postId}`);
+        //             //             //props.navigation.push('Search');
+        //             //             //props.navigation.push(routeName, { id: id, title: title, mediaUrl: mediaUrl, post: post });
+        //             //             //notificationIsLoading = true;
+
+        //             //disabled opening notification post
+        //             dispatch(PostsActions.setNotificationPostLoader(true));
+        //             dispatch(PostsActions.getPostById(response.notification.request.content.data.postId));
+        //         }
+        //     }
+        //     catch (e) {
+        //         console.error(e);
+        //     }
+        // });
         //Foreground notification handler
-        const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
-            //debugger;
-            if (notification.request.content.data && notification.request.content.data.postId) {
-                //Alert.alert(notification.request.content.data.postId.toString());
-            }
-            console.log('foregroundSubscription: ' + notification);
-        });
+        // const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
+        //     //debugger;
+        //     if (notification.request.content.data && notification.request.content.data.postId) {
+        //         //Alert.alert(notification.request.content.data.postId.toString());
+        //     }
+        //     console.log('foregroundSubscription: ' + notification);
+        // });
 
         return () => {
-            backgroundSubscription.remove();
-            foregroundSubscription.remove();
+            //backgroundSubscription.remove();
+            notifListener.remove();
+            //foregroundSubscription.remove();
         }
-    }, []);
+    }, [dispatch]);
 
 
     const getPostMediaUrl = useCallback((post) => {

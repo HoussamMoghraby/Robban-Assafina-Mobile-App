@@ -27,12 +27,13 @@
     },
     "android": {
       "package": "com.assafinaonline.robbanassafina",
-      "versionCode": 1,
-      "useNextNotificationsApi": true,
+      "versionCode": 2,
+      "useNextNotificationsApi": false,
       "googleServicesFile": "./google-services.json"
     },
     "notification": {
-      "icon": "./assets/notification_icon.png"
+      "icon": "./assets/notification_icon_96white.png",
+      "color": "#e0f2fe"
     }
   }
 }

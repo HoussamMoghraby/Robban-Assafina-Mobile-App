@@ -28,7 +28,6 @@ const LoginScreen = (props) => {
     const [errorText, setErrorText] = useState(null);
     const dispatch = useDispatch();
     const authenticateUser = useCallback(() => {
-        debugger;
         const authenticate = async () => {
             try {
                 setIsLoading(true);
