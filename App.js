@@ -11,7 +11,7 @@ import postsReducer from './store/reducers/posts';
 import categoriesReducer from './store/reducers/categories';
 import authReducer from './store/reducers/auth';
 import ReduxThunk from 'redux-thunk';
-import { isPlatformAndroid } from './helpers/Platform';
+import { isPlatformAndroid, isPlatformIOS } from './helpers/Platform';
 import * as Notifications_NEW from 'expo-notifications';
 import { Notifications } from 'expo';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -95,7 +95,12 @@ export default function App(props) {
     if (props.exp.notification || props.exp.notifications) {
       const setNotificationPost = async () => {
         debugger;
-        await AsyncStorage.setItem('notificationPost', props.exp.notification.message);
+        let postInNotification;
+        if (isPlatformIOS())
+          postInNotification = props.exp.notification.data ? JSON.stringify(props.exp.notification.data) : null;
+        else
+          postInNotification = props.exp.notification.data;
+        await AsyncStorage.setItem('notificationPost', postInNotification);
       }
       setNotificationPost();
     }

@@ -52,6 +52,7 @@ const HomeScreen = (props) => {
             if (topSponsorsDOM) {
                 imagesList = getSponsorsImages(topSponsorsDOM, 'top');
                 setSponsorsList(imagesList);
+                //setSponsorsList([]);
             }
         }
         if (sponsorsHTML)
@@ -134,11 +135,11 @@ const HomeScreen = (props) => {
 
         //handle background notification selection
         AsyncStorage.getItem('notificationPost').then((notif) => {
+            debugger;
             if (notif) {
                 console.log(notif);
-                debugger;
                 const notificationMessage = JSON.parse(notif);
-                if (notificationMessage.postId) {
+                if (notificationMessage.postId && notificationMessage.postId.toString() != "1") {
                     dispatch(PostsActions.setNotificationPostLoader(true));
                     dispatch(PostsActions.getPostById(notificationMessage.postId));
                 }
@@ -153,7 +154,7 @@ const HomeScreen = (props) => {
             console.log(notification);
             // if (notification && notification.origin && notification.origin == "received")
             //     Vibration.vibrate();
-            if (notification && notification.origin && notification.origin == "selected") {
+            if (notification && notification.origin && notification.origin == "selected" && notification.data && notification.data.postId.toString() != "1") {
                 debugger;
                 dispatch(PostsActions.setNotificationPostLoader(true));
                 dispatch(PostsActions.getPostById(notification.data.postId));

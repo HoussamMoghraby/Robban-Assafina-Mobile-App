@@ -171,7 +171,7 @@ const MoreScreen = (props) => {
                 </TouchableComponent>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', margin: 0 }} >
-                <MyText style={{ fontSize: 5 }}>App Version: 1.0.0.1</MyText>
+                <MyText style={{ fontSize: 5 }}>App Version: 1.0.0.2</MyText>
             </View>
         </View >
     )
